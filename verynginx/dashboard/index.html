@@ -941,6 +941,7 @@
                                         <td>Matcher</td>
                                         <td>Time(s)</td>
                                         <td>Max Request Counts</td>
+                                        <td>Action</td>
                                         <td>Return Code</td>
                                         <td>Response</td>
                                         <td>Count Alone</td>
@@ -962,6 +963,7 @@
                                             <td>{{ rule.matcher }}</td>
                                             <td>{{ rule.time }}</td>
                                             <td>{{ rule.count }}</td>
+                                            <td>{{ rule.action }}</td>
                                             <td>{{ rule.code }}</td>
                                             <td>{{ rule.response }}</td>
                                             <td>
@@ -1038,9 +1040,18 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
+                                    <label class="col-sm-2 control-label">Action</label>
+                                    <div class="col-sm-10">
+                                        <select class="form-control" name="action" v-model="editor.frequency_limit_rule.action">
+                                            <option value="captcha" selected="selected">Captcha</option>
+                                            <option value="block">Block</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group" v-show="editor.frequency_limit_rule.action=='block'">
                                     <label class="col-sm-2 control-label">Return Code</label>
                                     <div class="col-sm-10">
-                                         <select class="form-control" name="code">
+                                         <select class="form-control" name="code" v-model="editor.frequency_limit_rule.code">
                                             <option value="200">200</option>
                                             <option value="400">400</option>
                                             <option value="401">401</option>
@@ -1067,7 +1078,7 @@
 
                                     </div>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group" v-show="editor.frequency_limit_rule.action=='block'">
                                     <label class="col-sm-2 control-label">Custom Response</label>
                                     <div class="col-sm-10">
                                         <div class="config_form_line">
@@ -1218,6 +1229,7 @@
                                     <div class="col-sm-10">
                                         <select class="form-control" name="action" v-model="editor.filter_rule.action">
                                             <option value="accept">accept</option>
+                                            <option value="captcha">captcha</option>
                                             <option value="block">block</option>
                                         </select>
                                     </div>
@@ -1832,6 +1844,29 @@
                                 <div class="col-sm-2">Read Only</div>
                                 <div class="col-sm-10">
                                     <input class="vn-config-input" type="checkbox" v-model="config_now.readonly">
+                                </div>
+                            </div>
+
+                            <div class="config_sub_title">
+                                Captcha
+                            </div>
+
+                            <div class="vn-config-box row">
+                                <div class="col-sm-2">Captcha URI</div>
+                                <div class="col-sm-10">
+                                    <input class="form-control vn-config-input" type="text" v-model="config_now.captcha.uri" placeholder="captcha uri">
+                                </div>
+                            </div>
+                            <div class="vn-config-box row">
+                                <div class="col-sm-2">Redis host</div>
+                                <div class="col-sm-10">
+                                    <input class="form-control vn-config-input" type="text" v-model="config_now.captcha.redis_host" placeholder="Redis host">
+                                </div>
+                            </div>
+                            <div class="vn-config-box row">
+                                <div class="col-sm-2">Redis port</div>
+                                <div class="col-sm-10">
+                                    <input class="form-control vn-config-input" type="text" v-model="config_now.captcha.redis_port" placeholder="Redis port">
                                 </div>
                             </div>
                         </div>

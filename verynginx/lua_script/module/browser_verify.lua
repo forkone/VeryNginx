@@ -33,10 +33,12 @@ function _M.verify_cookie()
     local sign = _M.sign('cookie')
     if ngx.var.http_cookie ~= nil then
         if string.find( ngx.var.http_cookie , sign) ~= nil then
+--            ngx.log(ngx.STDERR,'verify_cookie success')
             return
         end
     end
 
+    ngx.log(ngx.STDERR,'verify_cookie fail, set cookie now')
     local cookie_prefix = VeryNginxConfig.configs['cookie_prefix']
     ngx.header["Set-Cookie"] =  cookie_prefix .. "_sign_cookie=" .. sign .. '; path=/' 
     
@@ -51,10 +53,12 @@ function _M.verify_javascript()
     local sign = _M.sign('javascript')
     if ngx.var.http_cookie ~= nil then
         if string.find( ngx.var.http_cookie , sign) ~= nil then
+--            ngx.log(ngx.STDERR,'verify_javascript success')
             return
         end
     end
     
+    ngx.log(ngx.STDERR,'verify_javascript fail, verify js now')
     if _M.verify_javascript_html == nil then
         local path = VeryNginxConfig.home_path() .."/support/verify_javascript.html"
         f = io.open( path, 'r' )

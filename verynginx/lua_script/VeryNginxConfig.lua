@@ -13,6 +13,7 @@ _M["configs"] = {}
 
 --------------default config------------
 
+-- _M.configs["captcha_uri"] = "/airwall-captchat/kaptchaPage"
 _M.configs["config_version"] = "0.36"
 _M.configs["readonly"] = false
 _M.configs["base_uri"] = "/verynginx"
@@ -20,6 +21,13 @@ _M.configs['dashboard_host'] = ""
 _M.configs['cookie_prefix'] = "verynginx"
 _M.configs["admin"] = {
     { ["user"] = "verynginx", ["password"] = "verynginx", ["enable"] = true}
+}
+
+_M.configs["captcha_enable"] = true
+_M.configs["captcha"] = {
+    ["uri"] = "/airwall-captcha/kaptchaPage",
+    ["redis_host"] = "127.0.0.1",
+    ["redis_port"] = 6379
 }
 
 _M.configs['matcher'] = {
@@ -263,6 +271,7 @@ end
 
 
 function _M.load_from_file()
+    ngx.log(ngx.STDERR, 'load from file....................')
     local config_dump_path = _M.home_path() .. "/configs/config.json"
     local file = io.open( config_dump_path, "r")
     

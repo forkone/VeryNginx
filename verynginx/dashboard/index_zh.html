@@ -1842,6 +1842,29 @@
                             </div>
                         </div>
 
+                        <div class="config_sub_title">
+                            验证码
+                        </div>
+
+                        <div class="vn-config-box row">
+                            <div class="col-sm-2">验证码 URI</div>
+                            <div class="col-sm-10">
+                                <input class="form-control vn-config-input" type="text" v-model="config_now.captcha.uri" placeholder="captcha uri">
+                            </div>
+                        </div>
+                        <div class="vn-config-box row">
+                            <div class="col-sm-2">Redis 主机</div>
+                            <div class="col-sm-10">
+                                <input class="form-control vn-config-input" type="text" v-model="config_now.captcha.redis_host" placeholder="Redis host">
+                            </div>
+                        </div>
+                        <div class="vn-config-box row">
+                            <div class="col-sm-2">Redis 端口</div>
+                            <div class="col-sm-10">
+                                <input class="form-control vn-config-input" type="text" v-model="config_now.captcha.redis_port" placeholder="Redis port">
+                            </div>
+                        </div>
+
                         <div class="config_container" id="config_system_allconfig">
                             <div class="config_title">
                                 原始配置文件json内容

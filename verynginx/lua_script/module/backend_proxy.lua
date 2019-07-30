@@ -46,7 +46,7 @@ function _M.find_node( upstream )
 end
 
 function _M.filter()
-
+    local host = ngx.var.host
     if VeryNginxConfig.configs["proxy_pass_enable"] ~= true then
         return
     end
