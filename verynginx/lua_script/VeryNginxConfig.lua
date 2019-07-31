@@ -13,7 +13,7 @@ _M["configs"] = {}
 
 --------------default config------------
 
--- _M.configs["captcha_uri"] = "/airwall-captchat/kaptchaPage"
+
 _M.configs["config_version"] = "0.36"
 _M.configs["readonly"] = false
 _M.configs["base_uri"] = "/verynginx"
@@ -21,13 +21,6 @@ _M.configs['dashboard_host'] = ""
 _M.configs['cookie_prefix'] = "verynginx"
 _M.configs["admin"] = {
     { ["user"] = "verynginx", ["password"] = "verynginx", ["enable"] = true}
-}
-
-_M.configs["captcha_enable"] = true
-_M.configs["captcha"] = {
-    ["uri"] = "/airwall-captcha/kaptchaPage",
-    ["redis_host"] = "127.0.0.1",
-    ["redis_port"] = 6379
 }
 
 _M.configs['matcher'] = {
@@ -146,6 +139,25 @@ _M.configs["summary_group_persistent_enable"] = true
 _M.configs["summary_group_temporary_enable"] = true
 _M.configs["summary_temporary_period"] = 60
 ----------------------Config End-------------
+
+_M.configs["redis"] = {
+    ["redis_host"] = "127.0.0.1",
+    ["redis_port"] = 6379
+}
+
+_M.configs["captcha_enable"] = false
+_M.configs["captcha"] = {
+    ["captcha_host"] = "127.0.0.1",
+    ["captcha_port"] = "8082",
+    ["captcha_uri"] = "/airwall-captcha/kaptchaPage",
+    ["captcha_cookie_prefix"] = "airwall_captcha"
+}
+
+_M.configs["blackip_enable"] = false
+_M.configs["blackip"] = {
+    ["blackip_redis_delay"] = 600,
+    ["blackip_redis_key"] = "ngx_blackip"
+}
 
 ------------------Config Updater----------------------
 

@@ -1,6 +1,6 @@
 
-local every_update = require "every_update"
+local blackip = require "blackip"
 
 ngx.log(ngx.ERR, "begin init worker lua file");
 
-every_update.blackip()
+blackip.every_update()

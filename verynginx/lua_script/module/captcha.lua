@@ -1,9 +1,9 @@
 
-
-_M = {}
-
 local VeryNginxConfig = require "VeryNginxConfig"
 local myredis = require "redis_util"
+
+local _M = {}
+
 -- 本地缓存中的验证码 ID
 local captcha = ngx.shared.captcha
 -- 客户端 IP
@@ -93,8 +93,8 @@ function _M.redirectToCaptcha()
     
     -- 为什么 ngx.var.host 取的值没有端口??? 参考: http://nginx.org/en/docs/http/ngx_http_core_module.html#var_server_port, 跟它的取值顺序有关, 默认取的 hostname 而不是 request header 里的 Host
     -- captcha_url = ngx_var_scheme..'://'..ngx_var_host..VeryNginxConfig.configs["captcha_uri"]
-    local redisConfig = VeryNginxConfig.configs['captcha']
-    local captcha_url = redisConfig['uri']
+    local CaptchaConfig = VeryNginxConfig.configs['captcha']
+    local captcha_url = CaptchaConfig['captcha_uri']
     local current_url = ngx.escape_uri(ngx_var_scheme..'://'..ngx_request_header['Host']..ngx_var_uri)
     if ngx_var.args ~= nil then
         current_url = ngx.escape_uri(ngx_var_scheme..'://'..ngx_request_header['Host']..ngx_var_uri..'?'..ngx_var.args)

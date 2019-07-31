@@ -1848,27 +1848,59 @@
                             </div>
 
                             <div class="config_sub_title">
-                                Captcha
-                            </div>
-
-                            <div class="vn-config-box row">
-                                <div class="col-sm-2">Captcha URI</div>
-                                <div class="col-sm-10">
-                                    <input class="form-control vn-config-input" type="text" v-model="config_now.captcha.uri" placeholder="captcha uri">
-                                </div>
+                                Redis
                             </div>
                             <div class="vn-config-box row">
                                 <div class="col-sm-2">Redis host</div>
                                 <div class="col-sm-10">
-                                    <input class="form-control vn-config-input" type="text" v-model="config_now.captcha.redis_host" placeholder="Redis host">
+                                    <input class="form-control vn-config-input" type="text" v-model="config_now.redis.redis_host" placeholder="Redis host">
                                 </div>
                             </div>
                             <div class="vn-config-box row">
                                 <div class="col-sm-2">Redis port</div>
                                 <div class="col-sm-10">
-                                    <input class="form-control vn-config-input" type="text" v-model="config_now.captcha.redis_port" placeholder="Redis port">
+                                    <input class="form-control vn-config-input" type="text" v-model="config_now.redis.redis_port" placeholder="Redis port">
                                 </div>
                             </div>
+
+                            <div class="config_sub_title">
+                                Captcha
+                            </div>
+                            <div class="vn-config-box row">
+                                <div class="col-sm-2">Captcha URI</div>
+                                <div class="col-sm-10">
+                                    <input class="form-control vn-config-input" type="text" v-model="config_now.captcha.captcha_uri" placeholder="Captcha uri">
+                                </div>
+                            </div>
+                            <div class="vn-config-box row">
+                                <div class="col-sm-2">Captcha host</div>
+                                <div class="col-sm-10">
+                                    <input class="form-control vn-config-input" type="text" v-model="config_now.captcha.captcha_host" placeholder="Captcha host">
+                                </div>
+                            </div>
+                            <div class="vn-config-box row">
+                                <div class="col-sm-2">Captcha port</div>
+                                <div class="col-sm-10">
+                                    <input class="form-control vn-config-input" type="text" v-model="config_now.captcha.captcha_port" placeholder="Captcha port">
+                                </div>
+                            </div>
+                            
+                            <div class="config_sub_title">
+                                BlackIP
+                            </div>
+                            <div class="vn-config-box row">
+                                <div class="col-sm-2">BlackIP redis delay</div>
+                                <div class="col-sm-10">
+                                    <input class="form-control vn-config-input" type="text" v-model="config_now.blackip.blackip_redis_delay" placeholder="blackip redis delay in seconds">
+                                </div>
+                            </div>
+                            <div class="vn-config-box row">
+                                <div class="col-sm-2">BlackIP redis key</div>
+                                <div class="col-sm-10">
+                                    <input class="form-control vn-config-input" type="text" v-model="config_now.blackip_redis_key" placeholder="blackip redis key">
+                                </div>
+                            </div>
+                            
                         </div>
 
                         <div class="config_container" id="config_system_allconfig">
