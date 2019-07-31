@@ -39,7 +39,7 @@ function _M.get(key)
         local res, err = red:get(key)
         if err then
             ngx.log(ngx.ERR, 'get '..key..' from redis failed: '..err)
-        elseif res == ngx.null then
+        elseif res == null then
             res = ''
         end
         _M.close(red)

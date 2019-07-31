@@ -4,6 +4,7 @@
 -- -- @Link    : 
 -- -- @Disc    : url router of verynginx's control panel 
 
+local blackip = require "blackip"
 local summary = require "summary"
 local status = require "status"
 local cookie = require "cookie"
@@ -119,6 +120,7 @@ _M.route_table = {
     { ['method'] = "POST", ['auth']= false, ["path"] = "/login", ['handle'] = _M.login },
     { ['method'] = "GET",  ['auth']= true,  ["path"] = "/summary", ['handle'] = summary.report },
     { ['method'] = "GET",  ['auth']= true,  ["path"] = "/status", ['handle'] = status.report },
+--    { ['method'] = "GET",  ['auth']= true,  ["path"] = "/reportblackip", ['handle'] = blackip.report },
     { ['method'] = "POST",  ['auth']= true,  ["path"] = "/status/clear", ['handle'] = summary.clear },
     { ['method'] = "GET",  ['auth']= true,  ["path"] = "/config", ['handle'] = VeryNginxConfig.report },
     { ['method'] = "POST", ['auth']= true,  ["path"] = "/config", ['handle'] = VeryNginxConfig.set },

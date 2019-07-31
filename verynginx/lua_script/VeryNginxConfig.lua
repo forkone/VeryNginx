@@ -153,7 +153,7 @@ _M.configs["captcha"] = {
     ["captcha_cookie_prefix"] = "airwall_captcha"
 }
 
-_M.configs["blackip_enable"] = false
+_M.configs["blackip_enable"] = true
 _M.configs["blackip"] = {
     ["blackip_redis_delay"] = 600,
     ["blackip_redis_key"] = "ngx_blackip"
@@ -283,7 +283,6 @@ end
 
 
 function _M.load_from_file()
-    ngx.log(ngx.STDERR, 'load from file....................')
     local config_dump_path = _M.home_path() .. "/configs/config.json"
     local file = io.open( config_dump_path, "r")
     
