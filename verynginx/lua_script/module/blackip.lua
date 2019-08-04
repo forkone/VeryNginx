@@ -35,7 +35,7 @@ end
 function _M.report()
     local blackip_keys = ngx_blackip:get_keys()
     for k,v in ipairs(blackip_keys) do
-        ngx.say(v.."        value        "..ngx_blackip:get(v))
+        ngx.say( string.format("%-20s\tvalue\t%s",v,blackip:get(v)) )
     end
 end
 
@@ -44,9 +44,9 @@ function _M.load_from_redis()
 
     local blackip_redis_key = BlackipConfig["blackip_redis_key"]
 
+    ngx_blackip:flush_all()
     local value = myredis.smembers(blackip_redis_key)
     if value or value == '' then
-        ngx_blackip:flush_all()
         for index, item in ipairs(value) do
             ngx_blackip:set(item, 1)
         end
