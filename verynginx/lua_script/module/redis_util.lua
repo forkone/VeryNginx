@@ -18,14 +18,14 @@ function _M.connect()
         local count
         count, err = red:get_reused_times()
         if 0 == count then
-                ok, err = red:auth(RedisConfig['redis_passwd'])
-                if not ok then
-                    ngx.say("failed to auth: ", err)
-                    return
-                end
-        elseif err then
-                ngx.say("failed to get reused times: ", err)
+            ok, err = red:auth(RedisConfig['redis_passwd'])
+            if not ok then
+                ngx.log(ngx.ERR,"failed to auth: ", err)
                 return
+            end
+        elseif err then
+            ngx.log(ngx.ERR,"failed to get reused times: ", err)
+            return
         end
         return red
     end
