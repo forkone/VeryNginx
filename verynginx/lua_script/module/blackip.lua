@@ -4,6 +4,7 @@
 
 local VeryNginxConfig = require "VeryNginxConfig"
 local myredis = require "redis_util"
+local json = require "json"
 
 local _M = {}
 
