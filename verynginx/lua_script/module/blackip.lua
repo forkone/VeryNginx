@@ -33,10 +33,18 @@ end
 
 
 function _M.report()
+    
+    local report = {}
+    
     local blackip_keys = ngx_blackip:get_keys()
     for k,v in ipairs(blackip_keys) do
-        ngx.say( string.format("%-20s\tvalue\t%s",v,blackip:get(v)) )
+        report[v] = ngx_blackip:get(v)
     end
+
+--    report['ret'] = 'success'
+
+    return json.encode( report )
+
 end
 
 

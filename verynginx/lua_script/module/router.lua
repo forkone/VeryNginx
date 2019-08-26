@@ -37,7 +37,7 @@ function _M.filter()
     if string.find( uri, base_uri ) == 1 then
         local path = string.sub( uri, string.len( base_uri ) + 1 )
        
-        for i,item in ipairs( _M.route_table ) do
+        for i,item in ipairs( _M.route_table ) do   
             if method == item['method'] and path == item['path'] then
                 ngx.header.content_type = "application/json"
                 ngx.header.charset = "utf-8"
@@ -120,8 +120,8 @@ _M.route_table = {
     { ['method'] = "POST", ['auth']= false, ["path"] = "/login", ['handle'] = _M.login },
     { ['method'] = "GET",  ['auth']= true,  ["path"] = "/summary", ['handle'] = summary.report },
     { ['method'] = "GET",  ['auth']= true,  ["path"] = "/status", ['handle'] = status.report },
---    { ['method'] = "GET",  ['auth']= true,  ["path"] = "/reportblackip", ['handle'] = blackip.report },
-    { ['method'] = "POST",  ['auth']= true,  ["path"] = "/status/clear", ['handle'] = summary.clear },
+    { ['method'] = "GET",  ['auth']= false, ["path"] = "/blackip", ['handle'] = blackip.report },
+    { ['method'] = "POST", ['auth']= true,  ["path"] = "/status/clear", ['handle'] = summary.clear },
     { ['method'] = "GET",  ['auth']= true,  ["path"] = "/config", ['handle'] = VeryNginxConfig.report },
     { ['method'] = "POST", ['auth']= true,  ["path"] = "/config", ['handle'] = VeryNginxConfig.set },
     { ['method'] = "GET",  ['auth']= true,  ["path"] = "/loadconfig", ['handle'] = VeryNginxConfig.load_from_file },

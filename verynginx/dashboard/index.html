@@ -87,8 +87,8 @@
                         <li class="topnav" id="topnav_summary" >
                             <a href="#" onclick="dashboard.switch_to_page('summary')" >Summary</a>
                         </li>
-                        <li class="topnav"id="topnav_firewall" style="display:none">
-                            <a href="#" onclick="dashboard.switch_to_page('firewall')" >防火墙</a>
+                        <li class="topnav"id="topnav_blackip" >
+                            <a href="#" onclick="dashboard.switch_to_page('blackip')" >BlackIP</a>
                         </li>
                         <li class="topnav" id="topnav_about" >
                             <a href="#" onclick="dashboard.switch_to_page('about')" >About</a>
@@ -2273,8 +2273,10 @@
                 </table>
             </div>
         </div>
-        <div class="page" id="page_firewall" style="display:none">
-            防火墙
+        <div class="page" id="page_blackip" style="display:none">
+            <div>
+                <pre id="verynginx_blackip">{{all_blackip_json}}</pre>
+            </div>
         </div>
        
         <div class="page" id="page_about" style="display:none">
@@ -2283,6 +2285,12 @@
                 <h3 class="text-center" id="about_sub_title">A very powerful and friendly nginx</h3>
                 <div id="about_sub_btn_container">
                     <a id="about_sub_btn" target="_blank" href="https://github.com/alexazhou/VeryNginx">
+                        Look in Github
+                    </a>
+                </div>
+                <h3 class="text-center" id="about_sub_title">A branch of VeryNginx with some new feathures</h3>
+                <div id="about_sub_btn_container">
+                    <a id="about_sub_btn" target="_blank" href="https://github.com/forkone/airwall">
                         Look in Github
                     </a>
                 </div>
