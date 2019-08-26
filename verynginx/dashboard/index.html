@@ -26,6 +26,7 @@
 <script src="js/matcher_editor.js"></script>
 <script src="js/upstream_editor.js"></script>
 <script src="js/config.js"></script>
+<script src="js/blackip.js"></script>
 <script src="js/dashboard.js"></script>
 <script src="js/pace.min.js"></script>
 <script src="js/tips.js"></script>
@@ -2275,7 +2276,7 @@
         </div>
         <div class="page" id="page_blackip" style="display:none">
             <div>
-                <pre id="verynginx_blackip">{{all_blackip_json}}</pre>
+                <pre id="verynginx_blackip" v-text="all_blackip_json"></pre>
             </div>
         </div>
        
@@ -2288,6 +2289,8 @@
                         Look in Github
                     </a>
                 </div>
+                <br/>
+                <h1 class="text-center" id="about_title">Airwall</h1>
                 <h3 class="text-center" id="about_sub_title">A branch of VeryNginx with some new feathures</h3>
                 <div id="about_sub_btn_container">
                     <a id="about_sub_btn" target="_blank" href="https://github.com/forkone/airwall">
