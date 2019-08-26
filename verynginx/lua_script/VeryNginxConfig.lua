@@ -142,7 +142,9 @@ _M.configs["summary_temporary_period"] = 60
 
 _M.configs["redis"] = {
     ["redis_host"] = "127.0.0.1",
-    ["redis_port"] = 6379
+    ["redis_port"] = 6379,
+    ["redis_dbnum"] = 0,
+    ["redis_passwd"] = "foobar",
 }
 
 _M.configs["captcha_enable"] = false
