@@ -56,7 +56,6 @@ function _M.filter()
             limit_dict:incr( key, 1 )
 
             if count_now > tonumber(count) then
-                ngx.log(ngx.ERR, "Action is "..rule['action'])
                 if rule['action'] ~= 'captcha' then
                     if rule['response'] ~= nil then
                         ngx.status = tonumber( rule['code'] )
@@ -65,13 +64,14 @@ function _M.filter()
                             ngx.header.content_type = response['content_type']
                             ngx.say( response['body'] )
                         end
-                    ngx.log(ngx.STDERR,rule['matcher'],' ',rule['action'],' ',rule['code'],' ',rule['response'])
+                        ngx.log(ngx.STDERR,'freq_limit_'..rule['matcher']..'_'..rule['action'],' ',rule['code'],' ',rule['response'])
                         ngx.exit( ngx.HTTP_OK )
                     else
-                    ngx.log(ngx.STDERR,rule['matcher'],' ',rule['action'],' ',rule['code'],' ',rule['response'])
+                    	ngx.log(ngx.STDERR,'freq_limit_'..rule['matcher']..'_'..rule['action'],' ',rule['code'],' ',rule['response'])
                         ngx.exit( tonumber( rule['code'] ) )
                     end
                 else 
+                    ngx.log(ngx.STDERR,'freq_limit_'..rule['matcher'],' ',rule['action'],' ',rule['code'],' ',rule['response'])
                     captcha.freqCheck(key, time)
                 end
             end

@@ -37,7 +37,7 @@ function _M.filter()
     if string.find( uri, base_uri ) == 1 then
         local path = string.sub( uri, string.len( base_uri ) + 1 )
        
-        for i,item in ipairs( _M.route_table ) do   
+        for i,item in ipairs( _M.route_table ) do
             if method == item['method'] and path == item['path'] then
                 ngx.header.content_type = "application/json"
                 ngx.header.charset = "utf-8"
