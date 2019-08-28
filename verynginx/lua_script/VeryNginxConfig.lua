@@ -16,11 +16,12 @@ _M["configs"] = {}
 
 _M.configs["config_version"] = "0.36"
 _M.configs["readonly"] = false
-_M.configs["base_uri"] = "/verynginx"
+_M.configs["base_uri"] = "/airwall"
 _M.configs['dashboard_host'] = ""
-_M.configs['cookie_prefix'] = "verynginx"
+_M.configs['cookie_prefix'] = "airwall"
 _M.configs["admin"] = {
-    { ["user"] = "verynginx", ["password"] = "verynginx", ["enable"] = true}
+    { ["user"] = "verynginx", ["password"] = "verynginx", ["enable"] = false},
+    { ["user"] = "walladmin", ["password"] = "walladmin@123", ["enable"] = true}
 }
 
 _M.configs['matcher'] = {
@@ -189,14 +190,14 @@ function _M.version_updater_022( configs )
 end
 
 function _M.version_updater_03( configs )
-    configs['base_uri'] = "/verynginx"
+    configs['base_uri'] = "/airwall"
     configs["config_version"] = "0.31"
     return configs
 end
 
 function _M.version_updater_031( configs )
     configs['dashboard_host'] = ""
-    configs['cookie_prefix'] = "verynginx"
+    configs['cookie_prefix'] = "airwall"
     configs["config_version"] = "0.32"
     return configs
 end
