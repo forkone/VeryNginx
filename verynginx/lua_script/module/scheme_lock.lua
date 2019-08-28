@@ -11,7 +11,7 @@ local VeryNginxConfig = require "VeryNginxConfig"
 local request_tester = require "request_tester"
 
 
-function scheme_judge(uri)
+function _M.scheme_judge(uri)
     local ngx_re_find  = ngx.re.find
     local matcher_list = VeryNginxConfig.configs['matcher']
 
@@ -32,7 +32,7 @@ function _M.run()
     end
 
     local ngx_var = ngx.var
-    local scheme = scheme_judge( ngx_var.uri )
+    local scheme = _M.scheme_judge( ngx_var.uri )
     if scheme == "none" or scheme == ngx_var.scheme then
         return
     end

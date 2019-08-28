@@ -34,15 +34,18 @@ end
 
 
 function _M.report()
-    
+
     local report = {}
-    
+    local blackip = {}
+
     local blackip_keys = ngx_blackip:get_keys()
+    table.remove(blackip_keys)
     for k,v in ipairs(blackip_keys) do
-        report[v] = ngx_blackip:get(v)
+        blackip[v] = ngx_blackip:get(v)
     end
 
---    report['ret'] = 'success'
+    report["last_update_time"] = ngx_blackip:get("last_update_time")
+    report["blackip"] = blackip
 
     return json.encode( report )
 
@@ -59,7 +62,7 @@ function _M.load_from_redis()
         for index, item in ipairs(value) do
             ngx_blackip:set(item, 1)
         end
-        ngx_blackip:lpush("last_update_time", ngx.localtime())
+        ngx_blackip:add("last_update_time", ngx.localtime())
         ngx.log(ngx.ERR, "load_from_redis complete! ")
     else
         ngx.log(ngx.ERR, "load_from_redis failed! ")
@@ -89,6 +92,13 @@ function _M.every_update()
         end
     end
     
+end
+
+
+function _M.clearip()
+    ngx_blackip:flush_all()
+    ngx_blackip:add("last_clear_time", ngx.localtime())
+    ngx.log(ngx.ERR,"clear ip over, last_clear_time: ", ngx_blackip:get("last_clear_time"))
 end
 
 
