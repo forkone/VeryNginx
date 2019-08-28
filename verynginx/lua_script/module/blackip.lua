@@ -59,7 +59,7 @@ function _M.load_from_redis()
         for index, item in ipairs(value) do
             ngx_blackip:set(item, 1)
         end
-        ngx_blackip:add("last_update_time", ngx.localtime())
+        ngx_blackip:lpush("last_update_time", ngx.localtime())
         ngx.log(ngx.ERR, "load_from_redis complete! ")
     else
         ngx.log(ngx.ERR, "load_from_redis failed! ")
