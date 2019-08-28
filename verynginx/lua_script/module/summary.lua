@@ -174,12 +174,12 @@ function _M.report()
 
 
     for k, v in pairs( keys ) do
-        record_key = nil
-        record_table = nil
-        status = nil 
-        size = nil 
-        time = nil 
-        count = nil 
+        local record_key = nil
+        local record_table = nil
+        local status = nil 
+        local size = nil 
+        local time = nil 
+        local count = nil 
         
         if v.find(v, KEY_URI_STATUS) == 1 then
             record_key = str_sub( v, str_len(KEY_URI_STATUS) + 1, -5 ) 
