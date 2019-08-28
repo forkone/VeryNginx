@@ -26,7 +26,7 @@ function _M.filter()
     end
     
     if res == 1 then
-        ngx.log(ngx.ERR,"ip_blacklist_hit_and_block");
+        ngx.log(ngx.ERR,"ip_blacklist_hit_and_block ");
         ngx.exit(403)
     end
 
