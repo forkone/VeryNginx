@@ -98,7 +98,7 @@ function _M.every_update()
 end
 
 
-function _M.clearip()
+function _M.clear()
     ngx_blackip:flush_all()
     ngx_blackip:add("last_clear_time", ngx.localtime())
     ngx.log(ngx.ERR,"clear ip over, last_clear_time: ", ngx_blackip:get("last_clear_time"))
