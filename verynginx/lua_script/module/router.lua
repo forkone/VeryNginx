@@ -121,6 +121,8 @@ _M.route_table = {
     { ['method'] = "GET",  ['auth']= true,  ["path"] = "/summary", ['handle'] = summary.report },
     { ['method'] = "GET",  ['auth']= true,  ["path"] = "/status", ['handle'] = status.report },
     { ['method'] = "GET",  ['auth']= false, ["path"] = "/blackip", ['handle'] = blackip.report },
+    { ['method'] = "POST", ['auth']= true,  ["path"] = "/blackip/clear", ['handle'] = blackip.clear },
+    { ['method'] = "POST", ['auth']= true,  ["path"] = "/blackip/lfr", ['handle'] = blackip.load_from_redis },
     { ['method'] = "POST", ['auth']= true,  ["path"] = "/status/clear", ['handle'] = summary.clear },
     { ['method'] = "GET",  ['auth']= true,  ["path"] = "/config", ['handle'] = VeryNginxConfig.report },
     { ['method'] = "POST", ['auth']= true,  ["path"] = "/config", ['handle'] = VeryNginxConfig.set },

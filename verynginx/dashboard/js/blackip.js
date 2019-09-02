@@ -32,4 +32,18 @@ blackip.get_blackip = function(){
     }); 
 }
 
+blackip.clear = function( ){
+    $.post('./blackip/clear', function(){
+        dashboard.show_notice( 'info', 'Clear data success' );
+        blackip.get_blackip(); 
+    })
+}
+    
+blackip.lfr = function( ){
+    $.post('./blackip/lfr', function(){
+        dashboard.show_notice( 'info', 'load from redis success' );
+        blackip.get_blackip();
+    }) 
+}
+
 blackip.get_blackip()

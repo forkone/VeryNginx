@@ -2281,6 +2281,11 @@
             </div>
         </div>
         <div class="page" id="page_blackip" style="display:none">
+            <p> Action:
+                <button type="button" class="btn btn-default" onclick="blackip.get_blackip()">ReRead</button>
+                <button type="button" class="btn btn-default" onclick="blackip.clear()">Clear All in Nginx</button>
+                <button type="button" class="btn btn-default" onclick="blackip.lfr()">Load From Redis</button>
+            </p>
             <div>
                 <pre id="verynginx_blackip" v-text="all_blackip_json"></pre>
             </div>

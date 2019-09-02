@@ -38,13 +38,16 @@ function _M.report()
     local report = {}
     local blackip = {}
 
-    local blackip_keys = ngx_blackip:get_keys()
+    local blackip_keys = ngx_blackip:get_keys(102400)
     table.remove(blackip_keys)
     for k,v in ipairs(blackip_keys) do
         blackip[v] = ngx_blackip:get(v)
     end
 
     report["last_update_time"] = ngx_blackip:get("last_update_time")
+    report["capacity_Kbytes"] = ngx_blackip:capacity() / 1024
+    report["free_space_Kbytes"] = ngx_blackip:free_space() / 1024
+    report["blackip_counts"] = #blackip_keys
     report["blackip"] = blackip
 
     return json.encode( report )
