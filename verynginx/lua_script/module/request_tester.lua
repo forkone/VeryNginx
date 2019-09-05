@@ -10,17 +10,17 @@ local _M = {}
 
 local tester = {}
 
-function _M.checkdb(x_ip)
+function _M.checkdb(remote_addr)
 
-    local res, err = ngx.shared.blackip:get(x_ip)
+    local res, err = ngx.shared.blackip:get(remote_addr)
     if err then
         ngx.log(ngx.ERR, 'get from local dict failed: '..err)
-        return 0
+        return ''
     end
     
     if res then
-        ngx.log(ngx.ERR,"blackip_hit ");
-        return res
+ --       ngx.log(ngx.ERR,"blackip_hit ");
+        return tostring(res)
     end
 
 end
@@ -76,7 +76,7 @@ function _M.test_var( match_operator, match_value, target_var )
             return true
         end
     elseif match_operator == 'InDB' then
-        if _M.checkdb(tartget_var) == match_value then
+        if _M.checkdb(target_var) == match_value then
             return true
         end
     end
