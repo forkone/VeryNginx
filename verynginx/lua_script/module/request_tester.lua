@@ -10,6 +10,22 @@ local _M = {}
 
 local tester = {}
 
+function _M.checkdb(x_ip)
+
+    local res, err = ngx.shared.blackip:get(x_ip)
+    if err then
+        ngx.log(ngx.ERR, 'get from local dict failed: '..err)
+        return 0
+    end
+    
+    if res then
+        ngx.log(ngx.ERR,"blackip_hit ");
+        return res
+    end
+
+end
+
+
 function _M.test( matcher )
     if matcher == nil then
         return false
@@ -57,6 +73,10 @@ function _M.test_var( match_operator, match_value, target_var )
         end
     elseif match_operator == '!' then
         if target_var == nil then
+            return true
+        end
+    elseif match_operator == 'InDB' then
+        if _M.checkdb(tartget_var) == match_value then
             return true
         end
     end

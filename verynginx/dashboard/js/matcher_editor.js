@@ -165,6 +165,7 @@ matcher_editor.form_meta = {
                         'Not Equal [!=]':"!=",
                         'Match RegEx [≈]':"≈",
                         'Not Matche RegEx [!≈]':"!≈",
+                        'List In Database [InDB]':"InDB",
                     }
                 },
                 {
