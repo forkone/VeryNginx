@@ -8,7 +8,7 @@ local _M = {}
 
 function _M.connect()
     local red = redis:new()
-    red:set_timeout(1000)
+    red:set_timeout(500)
     local ok, err = red:connect(RedisConfig['redis_host'], RedisConfig['redis_port'])
     if not ok then
         ngx.log(ngx.ERR, 'Redis get connection failed: '..err)
