@@ -1358,6 +1358,7 @@
                                         <td>Enable</td>
                                         <td>Matcher</td>
                                         <td>UpStream</td>
+                                        <td>UpStream URI</td>
                                         <td>Proxy Host</td>
                                         <td></td>
                                     </tr>
@@ -1376,6 +1377,7 @@
                                             </td>
                                             <td>{{ rule.matcher }}</td>
                                             <td>{{ rule.upstream }}</td>
+                                            <td>{{ rule.upstream_uri }}</td>
                                             <td>{{ rule.proxy_host }}</td>
                                             <td class="no_break">
                                                  <template v-if="(config_now.proxy_pass_rule._editing == undefined )">
@@ -1504,6 +1506,12 @@
                                                     <option value="{{$key}}">{{$key}}</option>
                                                 </template>
                                             </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">UpStream URI</label>
+                                        <div class="col-sm-10">
+                                            <input class="form-control" name="upstream_uri" type="text" placeholder='Set the upstream server uri start with /,leave blank to use the default'>
                                         </div>
                                     </div>
                                     <div class="form-group">

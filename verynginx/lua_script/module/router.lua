@@ -4,6 +4,7 @@
 -- -- @Link    : 
 -- -- @Disc    : url router of verynginx's control panel 
 
+local captcha = require "captcha"
 local blackip = require "blackip"
 local summary = require "summary"
 local status = require "status"
@@ -126,7 +127,7 @@ _M.route_table = {
     { ['method'] = "POST", ['auth']= true,  ["path"] = "/status/clear", ['handle'] = summary.clear },
     { ['method'] = "GET",  ['auth']= true,  ["path"] = "/config", ['handle'] = VeryNginxConfig.report },
     { ['method'] = "POST", ['auth']= true,  ["path"] = "/config", ['handle'] = VeryNginxConfig.set },
-    { ['method'] = "GET",  ['auth']= true,  ["path"] = "/loadconfig", ['handle'] = VeryNginxConfig.load_from_file },
+    { ['method'] = "GET",  ['auth']= true,  ["path"] = "/loadconfig", ['handle'] = VeryNginxConfig.load_from_file }
 }
 
 

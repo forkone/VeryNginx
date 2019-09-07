@@ -61,6 +61,7 @@ function _M.filter()
             --ngx.log(ngx.STDERR,'upstream:',rule['upstream'])
 
             local upstream = upstream_list[ rule['upstream'] ]
+            local upstream_uri = rule['upstream__uri']
             local node = _M.find_node( upstream )
             
             ngx.var.vn_proxy_scheme = node['scheme']
