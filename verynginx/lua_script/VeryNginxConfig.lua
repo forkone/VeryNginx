@@ -17,7 +17,7 @@ _M["configs"] = {}
 _M.configs["config_version"] = "0.36"
 _M.configs["readonly"] = false
 _M.configs["base_uri"] = "/airwall"
-_M.configs['dashboard_host'] = ""
+_M.configs['dashboard_host'] = "www.airwall.com"
 _M.configs['cookie_prefix'] = "airwall"
 _M.configs["admin"] = {
     { ["user"] = "verynginx", ["password"] = "verynginx", ["enable"] = false},
