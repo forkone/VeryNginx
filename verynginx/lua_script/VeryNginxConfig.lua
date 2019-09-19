@@ -145,7 +145,7 @@ _M.configs["redis"] = {
     ["redis_host"] = "127.0.0.1",
     ["redis_port"] = 6379,
     ["redis_dbnum"] = 0,
-    ["redis_passwd"] = "foobar",
+    ["redis_passwd"] = "password",
 }
 
 _M.configs["captcha_enable"] = false

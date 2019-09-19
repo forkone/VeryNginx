@@ -163,10 +163,10 @@ end
 
 function _M.every_update()
 
-    local interval = _M.configs['cluster']['cluster_update_interval']
+    local interval = ClusterConfig['cluster_update_interval']
     local handler = _M.load_from_request
     
-    if _M.configs["cluster_enable"] == false then
+    if VeryNginxConfig.configs["cluster_enable"] == false then
         return
     end
 

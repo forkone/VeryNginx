@@ -8,15 +8,15 @@ local CaptchaConfig = VeryNginxConfig.configs['captcha']
 
 local _M = {}
 
---nginx local shared dict storage in memory remote_addr-http_host:captcha_id 
-local captcha = ngx.shared.captcha
-local remote_addr = ngx.var.remote_addr
-local http_host = ngx.var.http_host
-local cookie_captchaid = ngx.var.cookie_captchaid
-local ngx_key = remote_addr..'_'..http_host
-
 --check cookie to tell if captchaed before. check local cache first, if not then check redis
 function _M.check()
+
+    --nginx local shared dict storage in memory remote_addr-http_host:captcha_id 
+    local captcha = ngx.shared.captcha
+    local remote_addr = ngx.var.remote_addr
+    local http_host = ngx.var.http_host
+    local cookie_captchaid = ngx.var.cookie_captchaid
+    local ngx_key = remote_addr..'_'..http_host
 
     if not cookie_captchaid then
         return _M.redirect_to_captcha()
@@ -42,11 +42,11 @@ function _M.check()
 end
 
 
-function _M.freqCheck(freqKey, time)
+function _M.check_with_freq(key, time)
 
     local result = _M.check()
     if result == true then
-        ngx.shared.frequency_limit:set( freqKey, 1, tonumber(time) )
+        ngx.shared.frequency_limit:set( key, 1, tonumber(time) )
     end
 end
 
@@ -59,10 +59,10 @@ function _M.redirect_to_captcha()
     local current_host = ngx_var.http_host
     local current_header = ngx.req.get_headers()
 
-    local current_url = ngx.escape_uri(current_scheme..'://'..current_host..current_uri)
+    local current_url = current_scheme..'://'..current_host..current_uri
     local captcha_url = CaptchaConfig["captcha_uri"]
 
-    return ngx.redirect(captcha_url..'?redirectUrl='..current_url, ngx.HTTP_MOVED_TEMPORARILY)
+    return ngx.redirect(captcha_url..'?redirectUrl='..current_url, 302)
 
 end
 

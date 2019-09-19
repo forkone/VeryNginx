@@ -20,7 +20,7 @@ function _M.filter()
         local enable = rule['enable']
         local matcher = matcher_list[ rule['matcher'] ] 
         if enable == true and request_tester.test( matcher ) == true then
-            ngx.log(ngx.ERR,rule['matcher']..rule['action'],' ',rule['code'] or "xxx",' ',rule['response'] or "none")
+            ngx.log(ngx.ERR,rule['matcher']..rule['action'],' ',rule['code'] or "captcha",' ',rule['response'] or "none")
             local action = rule['action']
             if action == 'accept' then
                 return

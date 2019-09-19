@@ -32,7 +32,7 @@ function _M.verify_cookie()
     local cookie_name =  cookie_prefix .. "_sign_cookie"
     local COOKIE_VAR = "cookie_" .. cookie_name
 
-    if ngx.var.[COOKIE_VAR] and ngx.var.[COOKIE_VAR] == sign then
+    if ngx.var[COOKIE_VAR] and ngx.var[COOKIE_VAR] == sign then
         ngx.log(ngx.INFO,'verify_cookie_success ')
         return
     end
@@ -55,7 +55,7 @@ function _M.verify_javascript()
     local cookie_name =  cookie_prefix .. "_sign_javascript"
     local COOKIE_VAR = "cookie_" .. cookie_name
 
-    if ngx.var.[COOKIE_VAR] and ngx.var.[COOKIE_VAR] == sign then
+    if ngx.var[COOKIE_VAR] and ngx.var[COOKIE_VAR] == sign then
         ngx.log(ngx.INFO,'verify_javascript_success ')
         return
     end

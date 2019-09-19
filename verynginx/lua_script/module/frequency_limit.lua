@@ -70,7 +70,7 @@ function _M.filter()
                         ngx.exit( tonumber( rule['code'] ) )
                     end
                 elseif rule['action'] == 'captcha' then
-                    captcha.freqCheck(key, time)
+                    captcha.check_with_freq(key, time)
                 end
             end
             

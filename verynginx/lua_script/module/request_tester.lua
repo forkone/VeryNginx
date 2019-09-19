@@ -39,7 +39,6 @@ function _M.test( matcher )
 		end
     end
     
-    ngx.log(ngx.INFO, "matcher " .. name .. " hit ")
 	return true
 end
 
