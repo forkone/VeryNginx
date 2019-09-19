@@ -40,6 +40,10 @@ tips.data = {
         {"tips":"Purpose","content":"Redirect to other address"},
         {"tips":"Usage","content":["From top to bottom to match, and only use the first match rule"]}
     ],
+    'action_filter':[
+        {"tips":"Purpose","content":"过滤请求"},
+        {"tips":"Usage","content":["从上到下依次匹配，第一个匹配到的filter生效，后面的filter不会继续匹配"]}
+    ],
     'filter_ipwhitelist':[
         {"tips":"功能介绍","content":"IP白名单功能可以指定免过滤的IP"},
         {"tips":"实现原理","content":"来自该列表中IP的访问请求将跳过过滤阶段"},

@@ -47,6 +47,7 @@ function _M.report()
     report["last_update_time"] = ngx_blackip:get("last_update_time")
     report["capacity_Kbytes"] = ngx_blackip:capacity() / 1024
     report["free_space_Kbytes"] = ngx_blackip:free_space() / 1024
+    report["storage_usage"] = 1 - ngx_blackip:free_space() / ngx_blackip:capacity()
     report["blackip_counts"] = #blackip_keys
     report["blackip"] = blackip
 
@@ -60,6 +61,7 @@ function _M.load_from_redis()
     local blackip_redis_key = BlackipConfig["blackip_redis_key"]
 
     ngx_blackip:flush_all()
+    ngx_blackip:flush_expired()
     local value = myredis.smembers(blackip_redis_key)
     if value or value == '' then
         for index, item in ipairs(value) do

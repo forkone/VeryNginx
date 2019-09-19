@@ -19,8 +19,8 @@ function _M.checkdb(remote_addr)
     end
     
     if res then
- --       ngx.log(ngx.ERR,"blackip_hit ");
-        return tostring(res)
+        ngx.log(ngx.INFO, "blackip_hit ");
+        return res
     end
 
 end
@@ -37,8 +37,9 @@ function _M.test( matcher )
                 return false
 			end
 		end
-	end
-
+    end
+    
+    ngx.log(ngx.INFO, "matcher " .. name .. " hit ")
 	return true
 end
 
@@ -76,7 +77,7 @@ function _M.test_var( match_operator, match_value, target_var )
             return true
         end
     elseif match_operator == 'InDB' then
-        if _M.checkdb(target_var) == match_value then
+        if tostring(_M.checkdb(target_var)) == match_value then
             return true
         end
     end
@@ -173,6 +174,7 @@ function _M.test_args( condition )
     ngx.req.read_body()
     --ensure body has not be cached into temp file
     if ngx.req.get_body_file() ~= nil then
+        ngx.log(ngx.ERR,"post data has been cached in temp file thus skip match")
         return false
     end
     
@@ -203,7 +205,8 @@ function _M.test_args( condition )
 end
 
 function _M.test_host( condition )
-    local hostname = ngx.var.host
+    local hostname = ngx.var.http_host
+--    ngx.var.host = server_name, 对于非80/443端口号的server没有端口号
     return _M.test_var( condition['operator'], condition['value'], hostname )
 end
 

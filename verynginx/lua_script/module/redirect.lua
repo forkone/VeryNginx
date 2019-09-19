@@ -1,14 +1,10 @@
--- -*- coding: utf-8 -*-
--- @Date    : 2016-01-02 20:39
--- @Author  : Alexa (AlexaZhou@163.com)
--- @Link    : 
--- @Disc    : redirect path
-
-local _M = {}
+--version 0.5.1  last update 20190918
+--request_uri vs uri ?
 
 local VeryNginxConfig = require "VeryNginxConfig"
 local request_tester = require "request_tester"
 
+local _M = {}
 
 function _M.run()
     
@@ -22,7 +18,7 @@ function _M.run()
     local ngx_redirect = ngx.redirect
     local ngx_var_uri = ngx_var.uri
     local ngx_var_scheme = ngx_var.scheme
-    local ngx_var_host = ngx_var.host
+    local ngx_var_host = ngx_var.http_host
     local matcher_list = VeryNginxConfig.configs['matcher']
 
 
@@ -43,12 +39,19 @@ function _M.run()
                     new_url = ngx_var_scheme.."://"..ngx_var_host..new_url
                 end
 
-                if ngx_var.args ~= nil then
-                    ngx_redirect( new_url.."?"..ngx_var.args , ngx.HTTP_MOVED_TEMPORARILY)
+                if  ngx_var.request_method == "POST" then
+                    local status = 307
                 else
-                    ngx_redirect( new_url , ngx.HTTP_MOVED_TEMPORARILY)
+                    local status = 302
+                end
+
+                if ngx_var.args ~= nil then
+                    ngx_redirect( new_url.."?"..ngx_var.args , status)
+                else
+                    ngx_redirect( new_url , status)
                 end
             end
+
             return
         end
     end

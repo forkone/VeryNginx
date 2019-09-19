@@ -1,17 +1,12 @@
--- -*- coding: utf-8 -*-
--- @Date    : 2015-10-25 15:56:46
--- @Author  : Alexa (AlexaZhou@163.com)
--- @Link    :
--- @Disc    : redirect request to right scheme
-
-local _M = {}
+--version 0.5.1  last update 20190918
 
 
 local VeryNginxConfig = require "VeryNginxConfig"
 local request_tester = require "request_tester"
 
+local _M = {}
 
-function _M.scheme_judge(uri)
+function _M.scheme_judge()
     local ngx_re_find  = ngx.re.find
     local matcher_list = VeryNginxConfig.configs['matcher']
 
@@ -32,22 +27,28 @@ function _M.run()
     end
 
     local ngx_var = ngx.var
-    local scheme = _M.scheme_judge( ngx_var.uri )
+    local scheme = _M.scheme_judge()
     if scheme == "none" or scheme == ngx_var.scheme then
         return
     end
 
     -- Used on VeryNginx behind Proxy situation
     if scheme == ngx.req.get_headers()["X-Forwarded-Proto"] then
-        -- ngx.log(ngx.STDERR, "Compare the protocol from more frontend level proxy, ", ngx.req.get_headers()["X-Forwarded-Protol"])
+        ngx.log(ngx.STDERR, "Compare the protocol from more frontend level proxy, ", ngx.req.get_headers()["X-Forwarded-Protol"])
         return
     end
 
-    if ngx_var.args ~= nil then
-        ngx.redirect( scheme.."://"..ngx_var.host..ngx_var.uri.."?"..ngx_var.args , ngx.HTTP_MOVED_TEMPORARILY)
+    local current_url = scheme.."://"..ngx_var.http_host..ngx_var.request_uri
+
+    --for POST request, code 302 will conduct that the browser use GET method to re-request 
+    if  ngx_var.request_method == "POST" then
+        local status = 307
     else
-        ngx.redirect( scheme.."://"..ngx_var.host..ngx_var.uri , ngx.HTTP_MOVED_TEMPORARILY)
+        local status = 302
     end
+
+    return ngx.redirect( current_url, status )
+
 end
 
 return _M

@@ -1,15 +1,10 @@
--- -*- coding: utf-8 -*-
--- @Date    : 2016-01-02 00:46
--- @Author  : Alexa (AlexaZhou@163.com)
--- @Link    : 
--- @Disc    : filter request'uri maybe attack
-
-local _M = {}
+--version 0.5.1  last update 20190918
 
 local VeryNginxConfig = require "VeryNginxConfig"
 local request_tester = require "request_tester"
 local captcha = require "captcha"
 
+local _M = {}
 
 function _M.filter()
 
@@ -17,8 +12,6 @@ function _M.filter()
         return
     end
     
-
-
     local matcher_list = VeryNginxConfig.configs['matcher']
     local response_list = VeryNginxConfig.configs['response']
     local response = nil
@@ -27,26 +20,25 @@ function _M.filter()
         local enable = rule['enable']
         local matcher = matcher_list[ rule['matcher'] ] 
         if enable == true and request_tester.test( matcher ) == true then
---          ngx.log(ngx.STDERR,rule['matcher'])
+            ngx.log(ngx.ERR,rule['matcher']..rule['action'],' ',rule['code'] or "xxx",' ',rule['response'] or "none")
             local action = rule['action']
             if action == 'accept' then
---              ngx.log(ngx.STDERR,rule['matcher'],' ',rule['action'])
-                return  
+                return
             elseif action == 'captcha' then
                 captcha.check()
                 return
-            else
+            elseif action == 'monitor' then
+                return
+            elseif action == 'block' then
                 ngx.status = tonumber( rule['code'] )
                 if rule['response'] ~= nil then
                     response = response_list[rule['response']]
                     if response ~= nil then
                         ngx.header.content_type = response['content_type']
                         ngx.say( response['body'] )
-                        ngx.log(ngx.STDERR,rule['matcher'],' ',rule['action'],' ',ngx.status,' ',rule['response'])
                         ngx.exit( ngx.HTTP_OK )
                     end
                 else
-                    ngx.log(ngx.STDERR,rule['matcher'],' ',rule['action'],' ',ngx.status,' none')
                     ngx.exit( tonumber( rule['code'] ) )
                 end
             end

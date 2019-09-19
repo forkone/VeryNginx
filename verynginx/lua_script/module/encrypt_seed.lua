@@ -34,7 +34,8 @@ function _M.get_seed()
 
 
     --if no saved seed, generate a new seed and saved
-    _M.seed = ngx.md5( ngx.now() )
+--    _M.seed = ngx.md5( ngx.now() )
+    _M.seed = _M.generate()
     local new_seed_json = dkjson.encode( { ["encrypt_seed"]= _M.seed }, {indent=true} )
     local file,err = io.open( seed_path, "w")
     
@@ -50,6 +51,16 @@ function _M.get_seed()
 end
 
 function _M.generate()
+    local template ="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+    local d = io.open("/dev/urandom", "r"):read(4)
+    math.randomseed(os.time() + d:byte(1) + (d:byte(4) * 256) + (d:byte(2) * 65536) + (d:byte(3) * 4294967296))
+    local uuid=string.gsub(template, "x",
+        function (c)
+            local v = (c == "x") and math.random(0, 0xf) or math.random(8, 0xb)
+            return string.format("%x", v)
+        end
+    )
+    return uuid
 end
 
 return _M

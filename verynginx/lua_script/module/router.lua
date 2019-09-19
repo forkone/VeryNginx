@@ -13,6 +13,7 @@ local VeryNginxConfig = require "VeryNginxConfig"
 local encrypt_seed = require "encrypt_seed"
 local json = require "json"
 local util = require "util"
+local cluster = require "cluster"
 
 local _M = {}
 
@@ -117,6 +118,7 @@ function _M.login()
     return json.encode({["ret"]="failed",["message"]="Username and password not match"})
 end
 
+
 _M.route_table = {
     { ['method'] = "POST", ['auth']= false, ["path"] = "/login", ['handle'] = _M.login },
     { ['method'] = "GET",  ['auth']= true,  ["path"] = "/summary", ['handle'] = summary.report },
@@ -127,9 +129,10 @@ _M.route_table = {
     { ['method'] = "POST", ['auth']= true,  ["path"] = "/status/clear", ['handle'] = summary.clear },
     { ['method'] = "GET",  ['auth']= true,  ["path"] = "/config", ['handle'] = VeryNginxConfig.report },
     { ['method'] = "POST", ['auth']= true,  ["path"] = "/config", ['handle'] = VeryNginxConfig.set },
-    { ['method'] = "GET",  ['auth']= true,  ["path"] = "/loadconfig", ['handle'] = VeryNginxConfig.load_from_file }
+    { ['method'] = "GET",  ['auth']= true,  ["path"] = "/loadconfig", ['handle'] = VeryNginxConfig.load_from_file },
+    { ['method'] = "GET",  ['auth']= true,  ["path"] = "/cluster", ['handle'] = cluster.report },
+    { ['method'] = "POST", ['auth']= true,  ["path"] = "/cluster/lfd", ['handle'] = VeryNginxConfig.load_from_data }
 }
-
 
 
 return _M

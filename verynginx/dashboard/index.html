@@ -240,9 +240,9 @@
                                 <div class="leftnav leftnav_2" config_name="action_scheme_lock" onclick="dashboard.switch_to_config(this)">Scheme Lock</div>
                                 <div class="leftnav leftnav_2" config_name="action_redirect" onclick="dashboard.switch_to_config(this)">Redirect</div>
                                 <div class="leftnav leftnav_2" config_name="action_uri_rewrite" onclick="dashboard.switch_to_config(this)">URI Rewrite</div>
+                                <div class="leftnav leftnav_2" config_name="action_filter" onclick="dashboard.switch_to_config(this)">Filter</div>
                                 <div class="leftnav leftnav_2" config_name="action_browser_verify" onclick="dashboard.switch_to_config(this)">Browser Verify</div>
                                 <div class="leftnav leftnav_2" config_name="action_frequency_limit" onclick="dashboard.switch_to_config(this)">Frequency Limit</div>
-                                <div class="leftnav leftnav_2" config_name="action_filter" onclick="dashboard.switch_to_config(this)">Filter</div>
                             </div>
                             
                             <div class="leftnav leftnav_1" group="backend" onclick="dashboard.switch_config_nav_group(this)">Backend</div>
@@ -274,6 +274,7 @@
                                     <tr>
                                         <td>#</td>
                                         <td>Name</td>
+                                        <td>Host</td>
                                         <td>Condition</td>
                                         <td></td>
                                     </tr>
@@ -283,6 +284,7 @@
                                         <tr v-bind:class="[ config_now.matcher._editing == $key ? 'editing' : '']">
                                             <td>{{ $index }}</td>
                                             <td>{{ matcher_name }}</td>
+                                            <td><condition v-bind:matcher_conditions="matcher_conditions.Host" ></condition></td>
                                             <td >
                                                 <condition v-bind:matcher_conditions="matcher_conditions" ></condition>
                                             </td>
@@ -694,6 +696,7 @@
                                         <td>Matcher</td>
                                         <td>RegEx</td>
                                         <td>Rewrite to</td>
+                                        <td>Rematch</td>
                                         <td></td>
                                     </tr>
                                 </thead>
@@ -712,6 +715,14 @@
                                             <td>{{ rule.matcher }}</td>
                                             <td>{{ rule.replace_re }}</td>
                                             <td>{{ rule.to_uri }}</td>
+                                            <td>
+                                                <template v-if="(rule.jump)">
+                                                    ✓
+                                                </template>
+                                                <template v-else>
+                                                    ✗
+                                                </template>
+                                            </td>
                                             <td class="no_break">
                                                 <template v-if="(config_now.uri_rewrite_rule._editing == undefined )">
                                                     <button type="button" class="btn btn-default btn-xs btn_up" onclick="config.config_move_up('uri_rewrite_rule',{{$index}})">
@@ -783,10 +794,190 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
+                                    <label class="col-sm-2 control-label">Rematch</label>
+                                    <div class="col-sm-10">
+                                         <div class="config_form_line">
+                                             <input type="checkbox" name="jump" >
+                                         </div>
+                                     </div>
+                                </div>
+                                <div class="form-group">
                                     <div class="col-sm-offset-2 col-sm-10">
                                         <template v-if="(config_now.uri_rewrite_rule._editing != undefined )">
                                             <button type="submit" class="btn btn-default" >Save</button>
                                             <button type="button" class="btn btn-default" onclick="config.config_edit_cacel('uri_rewrite_rule','config_uri_rewrite_form')">
+                                                Cancel
+                                            </button>
+                                        </template>
+                                        <template v-else>
+                                            <button type="submit" class="btn btn-default" >Add</button>
+                                        </template>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="config_container" id="config_action_filter">
+                            <div class="config_title">
+                                Filter
+                            </div>
+                            <input type="checkbox" id="checkbox" v-model="config_now.filter_enable">
+                            <label>Enable</label>
+                            <table class="table table-bordered config_table" id="config_filter_table">
+                                <thead>
+                                    <tr>
+                                        <td>#</td>
+                                        <td>Enable</td>
+                                        <td>Matcher</td>
+                                        <td>Action</td>
+                                        <td>Return Code</td>
+                                        <td>Response</td>
+                                        <td></td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <template v-for="rule in config_now.filter_rule">
+                                        <tr v-bind:class="[ config_now.filter_rule._editing == $index ? 'editing' : '']">
+                                            <td>{{ $index }}</td>
+                                            <td>
+                                                <template v-if="(rule.enable)">
+                                                    ✓
+                                                </template>
+                                                <template v-else>
+                                                    ✗
+                                                </template>
+                                            </td>
+                                            <td>{{ rule.matcher }}</td>
+                                            <td>{{ rule.action }}</td>
+                                            <td>
+                                                <template v-if="(rule.action == 'block')">
+                                                    {{ rule.code }}
+                                                </template>
+                                            </td>
+                                            <td>
+                                                <template v-if="(rule.action == 'block')">
+                                                    {{ rule.response }}
+                                                </template>
+                                            </td>
+                                            <td class="no_break">
+                                                 <template v-if="(config_now.filter_rule._editing == undefined )">
+                                                    <button type="button" class="btn btn-default btn-xs btn_up" onclick="config.config_move_up('filter_rule',{{$index}})">
+                                                        UP
+                                                    </button>
+                                                    <button type="button" class="btn btn-default btn-xs btn_down" onclick="config.config_move_down('filter_rule',{{$index}})">
+                                                        DOWN
+                                                    </button>
+                                                    <button type="button" class="btn btn-default btn-xs btn_del" onclick="config.config_mod('filter_rule',{{$index}},null)">
+                                                        DEL
+                                                    </button>
+                                                    <button type="button" class="btn btn-default btn-xs btn_edit" onclick="config.config_edit_begin('filter_rule',{{$index}},'config_filter_form')">
+                                                        EDIT
+                                                    </button>
+                                                </template> 
+                                                <template v-if="(config_now.filter_rule._editing == $index )">
+                                                    Editing
+                                                </template>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+
+                            <div class="config_sub_title">
+                                Add Rule
+                            </div>
+                            <hr>
+                            <form class="form-horizontal config_form" id="config_filter_form" 
+                                  onsubmit="config.config_edit_save( 'filter_rule', 'config_filter_form'); return false;" >
+                                
+                                <div class="form-group">
+                                    <div class="col-sm-10 col-sm-offset-2 ">
+                                        <div class="notice" v-if="( config_now.filter_rule._editing != undefined )" >
+                                            Now is editing rule <span class="editing_rule_name">{{config_now.filter_rule._editing}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Enable</label>
+                                    <div class="col-sm-10">
+                                        <div class="config_form_line">
+                                            <input type="checkbox" name="enable" v-model="editor.filter_rule.enable">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Matcher</label>
+                                    <div class="col-sm-10">
+                                        <select class="form-control" name="matcher" v-model="editor.filter_rule.matcher">
+                                            <template v-for="(matcher_name, matcher_conditions) in config_now.matcher | orderBy '$key'">
+                                                <option value="{{matcher_name}}">{{matcher_name}}</option>
+                                            </template>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Action</label>
+                                    <div class="col-sm-10">
+                                        <select class="form-control" name="action" v-model="editor.filter_rule.action">
+                                            <option value="accept">accept</option>
+                                            <option value="captcha">captcha</option>
+                                            <option value="block">block</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group" v-show="editor.filter_rule.action=='block'">
+                                    <label class="col-sm-2 control-label">Return Code</label>
+                                    <div class="col-sm-10">
+                                        <select class="form-control" name="code" id="a8888" v-model="editor.filter_rule.code">
+                                            <option value="200">200</option>
+                                            <option value="400">400</option>
+                                            <option value="401">401</option>
+                                            <option value="402">402</option>
+                                            <option value="403" selected>403</option>
+                                            <option value="404">404</option>
+                                            <option value="405">405</option>
+                                            <option value="406">406</option>
+                                            <option value="408">408</option>
+                                            <option value="409">409</option>
+                                            <option value="410">410</option>
+                                            <option value="426">426</option>
+                                            <option value="429">429</option>
+                                            <option value="444">444</option>
+                                            <option value="451">451</option>
+                                            <option value="500">500</option>
+                                            <option value="501">501</option>
+                                            <option value="502">502</option>
+                                            <option value="503">503</option>
+                                            <option value="504">504</option>
+                                            <option value="505">505</option>
+                                            <option value="507">507</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group" v-show="editor.filter_rule.action=='block'">
+                                    <label class="col-sm-2 control-label">Custom Response</label>
+                                    <div class="col-sm-10">
+                                        <div class="config_form_line">
+                                            <input type="checkbox" name="custom_response" v-model="editor.filter_rule.custom_response">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group" v-show="(editor.filter_rule.action=='block' && editor.filter_rule.custom_response==true )">
+                                    <label class="col-sm-2 control-label">Response</label>
+                                    <div class="col-sm-10">
+                                        <select class="form-control" name="response" v-model="editor.filter_rule.response">
+                                            <template v-for="(response_name, response_value) in config_now.response | orderBy '$key'">
+                                                <option value="{{response_name}}">{{response_name}}</option>
+                                            </template>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-offset-2 col-sm-10">
+                                        <template v-if="(config_now.filter_rule._editing != undefined )">
+                                            <button type="submit" class="btn btn-default" >Save</button>
+                                            <button type="button" class="btn btn-default" onclick="config.config_edit_cacel('filter_rule','config_filter_form')">
                                                 Cancel
                                             </button>
                                         </template>
@@ -1126,177 +1317,6 @@
                             </form>
                         </div>
                         
-                        <div class="config_container" id="config_action_filter">
-                            <div class="config_title">
-                                Filter
-                            </div>
-                            <input type="checkbox" id="checkbox" v-model="config_now.filter_enable">
-                            <label>Enable</label>
-                            <table class="table table-bordered config_table" id="config_filter_table">
-                                <thead>
-                                    <tr>
-                                        <td>#</td>
-                                        <td>Enable</td>
-                                        <td>Matcher</td>
-                                        <td>Action</td>
-                                        <td>Return Code</td>
-                                        <td>Response</td>
-                                        <td></td>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <template v-for="rule in config_now.filter_rule">
-                                        <tr v-bind:class="[ config_now.filter_rule._editing == $index ? 'editing' : '']">
-                                            <td>{{ $index }}</td>
-                                            <td>
-                                                <template v-if="(rule.enable)">
-                                                    ✓
-                                                </template>
-                                                <template v-else>
-                                                    ✗
-                                                </template>
-                                            </td>
-                                            <td>{{ rule.matcher }}</td>
-                                            <td>{{ rule.action }}</td>
-                                            <td>
-                                                <template v-if="(rule.action == 'block')">
-                                                    {{ rule.code }}
-                                                </template>
-                                            </td>
-                                            <td>
-                                                <template v-if="(rule.action == 'block')">
-                                                    {{ rule.response }}
-                                                </template>
-                                            </td>
-                                            <td class="no_break">
-                                                 <template v-if="(config_now.filter_rule._editing == undefined )">
-                                                    <button type="button" class="btn btn-default btn-xs btn_up" onclick="config.config_move_up('filter_rule',{{$index}})">
-                                                        UP
-                                                    </button>
-                                                    <button type="button" class="btn btn-default btn-xs btn_down" onclick="config.config_move_down('filter_rule',{{$index}})">
-                                                        DOWN
-                                                    </button>
-                                                    <button type="button" class="btn btn-default btn-xs btn_del" onclick="config.config_mod('filter_rule',{{$index}},null)">
-                                                        DEL
-                                                    </button>
-                                                    <button type="button" class="btn btn-default btn-xs btn_edit" onclick="config.config_edit_begin('filter_rule',{{$index}},'config_filter_form')">
-                                                        EDIT
-                                                    </button>
-                                                </template> 
-                                                <template v-if="(config_now.filter_rule._editing == $index )">
-                                                    Editing
-                                                </template>
-                                            </td>
-                                        </tr>
-                                    </template>
-                                </tbody>
-                            </table>
-
-                            <div class="config_sub_title">
-                                Add Rule
-                            </div>
-                            <hr>
-                            <form class="form-horizontal config_form" id="config_filter_form" 
-                                  onsubmit="config.config_edit_save( 'filter_rule', 'config_filter_form'); return false;" >
-                                
-                                <div class="form-group">
-                                    <div class="col-sm-10 col-sm-offset-2 ">
-                                        <div class="notice" v-if="( config_now.filter_rule._editing != undefined )" >
-                                            Now is editing rule <span class="editing_rule_name">{{config_now.filter_rule._editing}}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label">Enable</label>
-                                    <div class="col-sm-10">
-                                        <div class="config_form_line">
-                                            <input type="checkbox" name="enable" v-model="editor.filter_rule.enable">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label">Matcher</label>
-                                    <div class="col-sm-10">
-                                        <select class="form-control" name="matcher" v-model="editor.filter_rule.matcher">
-                                            <template v-for="(matcher_name, matcher_conditions) in config_now.matcher | orderBy '$key'">
-                                                <option value="{{matcher_name}}">{{matcher_name}}</option>
-                                            </template>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label">Action</label>
-                                    <div class="col-sm-10">
-                                        <select class="form-control" name="action" v-model="editor.filter_rule.action">
-                                            <option value="accept">accept</option>
-                                            <option value="captcha">captcha</option>
-                                            <option value="block">block</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-group" v-show="editor.filter_rule.action=='block'">
-                                    <label class="col-sm-2 control-label">Return Code</label>
-                                    <div class="col-sm-10">
-                                        <select class="form-control" name="code" id="a8888" v-model="editor.filter_rule.code">
-                                            <option value="200">200</option>
-                                            <option value="400">400</option>
-                                            <option value="401">401</option>
-                                            <option value="402">402</option>
-                                            <option value="403" selected>403</option>
-                                            <option value="404">404</option>
-                                            <option value="405">405</option>
-                                            <option value="406">406</option>
-                                            <option value="408">408</option>
-                                            <option value="409">409</option>
-                                            <option value="410">410</option>
-                                            <option value="426">426</option>
-                                            <option value="429">429</option>
-                                            <option value="444">444</option>
-                                            <option value="451">451</option>
-                                            <option value="500">500</option>
-                                            <option value="501">501</option>
-                                            <option value="502">502</option>
-                                            <option value="503">503</option>
-                                            <option value="504">504</option>
-                                            <option value="505">505</option>
-                                            <option value="507">507</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-group" v-show="editor.filter_rule.action=='block'">
-                                    <label class="col-sm-2 control-label">Custom Response</label>
-                                    <div class="col-sm-10">
-                                        <div class="config_form_line">
-                                            <input type="checkbox" name="custom_response" v-model="editor.filter_rule.custom_response">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group" v-show="(editor.filter_rule.action=='block' && editor.filter_rule.custom_response==true )">
-                                    <label class="col-sm-2 control-label">Response</label>
-                                    <div class="col-sm-10">
-                                        <select class="form-control" name="response" v-model="editor.filter_rule.response">
-                                            <template v-for="(response_name, response_value) in config_now.response | orderBy '$key'">
-                                                <option value="{{response_name}}">{{response_name}}</option>
-                                            </template>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="col-sm-offset-2 col-sm-10">
-                                        <template v-if="(config_now.filter_rule._editing != undefined )">
-                                            <button type="submit" class="btn btn-default" >Save</button>
-                                            <button type="button" class="btn btn-default" onclick="config.config_edit_cacel('filter_rule','config_filter_form')">
-                                                Cancel
-                                            </button>
-                                        </template>
-                                        <template v-else>
-                                            <button type="submit" class="btn btn-default" >Add</button>
-                                        </template>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
 
                         <div class="config_container" id="config_backend_proxy_pass">
                             <div class="config_title">
@@ -1860,19 +1880,19 @@
                                 Redis
                             </div>
                             <div class="vn-config-box row">
-                                <div class="col-sm-2">Redis host</div>
+                                <div class="col-sm-2 vn-config-label">Redis host</div>
                                 <div class="col-sm-10">
                                     <input class="form-control vn-config-input" type="text" v-model="config_now.redis.redis_host" placeholder="Redis host">
                                 </div>
                             </div>
                             <div class="vn-config-box row">
-                                <div class="col-sm-2">Redis port</div>
+                                <div class="col-sm-2 vn-config-label">Redis port</div>
                                 <div class="col-sm-10">
                                     <input class="form-control vn-config-input" type="text" v-model="config_now.redis.redis_port" placeholder="Redis port">
                                 </div>
                             </div>
                             <div class="vn-config-box row">
-                                <div class="col-sm-2">Redis passwd</div>
+                                <div class="col-sm-2 vn-config-label">Redis passwd</div>
                                 <div class="col-sm-10">
                                     <input class="form-control vn-config-input" type="text" v-model="config_now.redis.redis_passwd" placeholder="Redis passwd">
                                 </div>
@@ -1888,21 +1908,15 @@
                                 </div>
                             </div>
                             <div class="vn-config-box row">
-                                <div class="col-sm-2">Captcha URI</div>
+                                <div class="col-sm-2 vn-config-label">Captcha URI</div>
                                 <div class="col-sm-10">
                                     <input class="form-control vn-config-input" type="text" v-model="config_now.captcha.captcha_uri" placeholder="Captcha uri">
                                 </div>
                             </div>
                             <div class="vn-config-box row">
-                                <div class="col-sm-2">Captcha host</div>
+                                <div class="col-sm-2 vn-config-label">Valid Time</div>
                                 <div class="col-sm-10">
-                                    <input class="form-control vn-config-input" type="text" v-model="config_now.captcha.captcha_host" placeholder="Captcha host">
-                                </div>
-                            </div>
-                            <div class="vn-config-box row">
-                                <div class="col-sm-2">Captcha port</div>
-                                <div class="col-sm-10">
-                                    <input class="form-control vn-config-input" type="text" v-model="config_now.captcha.captcha_port" placeholder="Captcha port">
+                                    <input class="form-control vn-config-input" type="text" v-model="config_now.captcha.captcha_valid_time" placeholder="Valid time">
                                 </div>
                             </div>
                             
@@ -1916,13 +1930,13 @@
                                 </div>
                             </div>
                             <div class="vn-config-box row">
-                                <div class="col-sm-2">Redis delay</div>
+                                <div class="col-sm-2 vn-config-label">Redis delay</div>
                                 <div class="col-sm-10">
                                     <input class="form-control vn-config-input" type="text" v-model="config_now.blackip.blackip_redis_delay" placeholder="blackip redis delay in seconds,needs reload nginx">
                                 </div>
                             </div>
                             <div class="vn-config-box row">
-                                <div class="col-sm-2">Redis key</div>
+                                <div class="col-sm-2 vn-config-label">Redis key</div>
                                 <div class="col-sm-10">
                                     <input class="form-control vn-config-input" type="text" v-model="config_now.blackip.blackip_redis_key" placeholder="blackip redis key">
                                 </div>

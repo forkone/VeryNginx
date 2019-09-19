@@ -1,17 +1,15 @@
--- -*- coding: utf-8 -*-
--- @Date    : 2016-02-24 
--- @Author  : Alexa (AlexaZhou@163.com)
--- @Link    : 
--- @Disc    : verify that the remote client is a browser
-
-local _M = {}
+--version 0.5.1  last update 20190918
 
 local VeryNginxConfig = require "VeryNginxConfig"
 local request_tester = require "request_tester"
 local encrypt_seed = require "encrypt_seed"
 local util = require "util"
 
+local _M = {}
+
 _M.verify_javascript_html = nil
+
+local cookie_prefix = VeryNginxConfig.configs['cookie_prefix']
 
 function _M.sign( mark )
     local ua = ngx.var.http_user_agent
@@ -31,34 +29,39 @@ end
 
 function _M.verify_cookie()
     local sign = _M.sign('cookie')
-    if ngx.var.http_cookie ~= nil then
-        if string.find( ngx.var.http_cookie , sign) ~= nil then
---            ngx.log(ngx.STDERR,'verify_cookie success')
-            return
-        end
+    local cookie_name =  cookie_prefix .. "_sign_cookie"
+    local COOKIE_VAR = "cookie_" .. cookie_name
+
+    if ngx.var.[COOKIE_VAR] and ngx.var.[COOKIE_VAR] == sign then
+        ngx.log(ngx.INFO,'verify_cookie_success ')
+        return
     end
 
-    ngx.log(ngx.STDERR,'verify_cookie fail, set cookie now')
-    local cookie_prefix = VeryNginxConfig.configs['cookie_prefix']
-    ngx.header["Set-Cookie"] =  cookie_prefix .. "_sign_cookie=" .. sign .. '; path=/' 
-    
-    if ngx.var.args ~= nil then
-        ngx.redirect( ngx.var.scheme.."://"..ngx.var.http_host..ngx.var.uri.."?"..ngx.var.query_string , ngx.HTTP_MOVED_TEMPORARILY)
+    ngx.log(ngx.ERR,'verify_cookie_fail , set cookie now')
+    ngx.header["Set-Cookie"] =  cookie_name .. "=" .. sign
+
+    if  ngx.var.request_method == "POST" then
+        status = 307
     else
-        ngx.redirect( ngx.var.scheme.."://"..ngx.var.http_host..ngx.var.uri , ngx.HTTP_MOVED_TEMPORARILY)
+        status = 302
     end
+
+    ngx.redirect( ngx.var.scheme.."://"..ngx.var.http_host..ngx.var.request_uri, status)
+
 end
 
 function _M.verify_javascript()
     local sign = _M.sign('javascript')
-    if ngx.var.http_cookie ~= nil then
-        if string.find( ngx.var.http_cookie , sign) ~= nil then
---            ngx.log(ngx.STDERR,'verify_javascript success')
-            return
-        end
+    local cookie_name =  cookie_prefix .. "_sign_javascript"
+    local COOKIE_VAR = "cookie_" .. cookie_name
+
+    if ngx.var.[COOKIE_VAR] and ngx.var.[COOKIE_VAR] == sign then
+        ngx.log(ngx.INFO,'verify_javascript_success ')
+        return
     end
     
-    ngx.log(ngx.STDERR,'verify_javascript fail, verify js now')
+    ngx.log(ngx.ERR,'verify_javascript_fail , verify js now')
+
     if _M.verify_javascript_html == nil then
         local path = VeryNginxConfig.home_path() .."/support/verify_javascript.html"
         f = io.open( path, 'r' )
@@ -67,8 +70,6 @@ function _M.verify_javascript()
             f:close()
         end
     end
-    
-    local cookie_prefix = VeryNginxConfig.configs['cookie_prefix']
 
     local redirect_to = nil
     local html = _M.verify_javascript_html
@@ -76,11 +77,13 @@ function _M.verify_javascript()
     html = string.gsub( html,'INFOCOOKIE',sign )
     html = string.gsub( html,'COOKIEPREFIX',cookie_prefix )
 
-    if ngx.var.args ~= nil then
-		redirect_to =  ngx.var.scheme.."://"..ngx.var.http_host..ngx.var.uri.."?"..ngx.var.args , ngx.HTTP_MOVED_TEMPORARILY
-	else
-		redirect_to =  ngx.var.scheme.."://"..ngx.var.http_host..ngx.var.uri , ngx.HTTP_MOVED_TEMPORARILY
-	end
+    if  ngx.var.request_method == "POST" then
+        status = 307
+    else
+        status = 302
+    end
+    
+    redirect_to =  ngx.var.scheme.."://"..ngx.var.http_host..ngx.var.request_uri, status
 
     html = util.string_replace( html,'INFOURI',redirect_to, 1 )
     

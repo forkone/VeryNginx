@@ -1,8 +1,4 @@
--- -*- coding: utf-8 -*-
--- @Date    : 2016-02-21 
--- @Author  : Alexa (AlexaZhou@163.com)
--- @Link    : 
--- @Disc    : rewrite uri inside nginx
+--version 0.5.1  last update 20190918
 
 local _M = {}
 
@@ -21,8 +17,8 @@ function _M.run()
     local ngx_var = ngx.var 
     local ngx_set_uri = ngx.req.set_uri
     local ngx_var_uri = ngx_var.uri
-    local ngx_var_scheme = ngx_var.scheme
-    local ngx_var_host = ngx_var.host
+--    local ngx_var_scheme = ngx_var.scheme
+--    local ngx_var_host = ngx_var.http_host
     local matcher_list = VeryNginxConfig.configs['matcher']
 
 
@@ -38,7 +34,7 @@ function _M.run()
             end
 
             if new_uri ~= ngx_var_uri then
-                ngx_set_uri( new_uri , false )
+                ngx_set_uri( new_uri , rule['jump'] )
             end
             return
         end
