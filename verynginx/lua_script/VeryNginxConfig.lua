@@ -271,7 +271,6 @@ _M.version_updater = {
 
 local dkjson = require "dkjson"
 local json = require "json"
-local cluster = require "cluster"
 
 
 function _M.home_path()
@@ -434,13 +433,12 @@ function _M.dump_to_file( config_table )
 end
 
 
-function _M.load_from_request()
+function _M.load_from_data(data_string)
     
     if _M.configs["cluster_enable"] == false then
         return
     end
 
-    local data_string = cluster.request_for_config()
     local config_hash = ngx.md5( data_string )
     _M.config_hash = config_hash
     ngx.shared.status:set('vn_config_hash', config_hash )
@@ -462,26 +460,6 @@ function _M.load_from_request()
         return json.encode({["ret"]="error",["msg"]="config file decode error, will use default"})
     end
         
-end
-
-
-function _M.every_update()
-
-    local interval = _M.configs['cluster']['cluster_update_interval']
-    local handler = _M.load_from_request
-    
-    if _M.configs["cluster_enable"] == false then
-        return
-    end
-
-    if 0 == ngx.worker.id() then
-    	ngx.log(ngx.ERR, "start a timer to run VeryNginxConfig.load_from_request. interval: ", interval)
-    	local ok, err = ngx.timer.every(interval, handler)
-        if not ok then
-            ngx.log(ngx.ERR, "fail to create the VeryNginxConfig.load_from_request timer! " ..err)
-        end
-    end
-    
 end
 
 
