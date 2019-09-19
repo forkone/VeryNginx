@@ -6,7 +6,7 @@ local dkjson = require "dkjson"
 local json = require "json"
 
 local ClusterConfig = VeryNginxConfig.configs["cluster"]
-local master_path = "http://" .. ClusterConfig["cluster_peer_host"] .. VeryNginxConfig['base_uri']
+local master_path = "http://" .. ClusterConfig["cluster_peer_host"] .. VeryNginxConfig.configs["base_uri"]
 local master_login_uri = master_path .. "/login"
 local master_config_uri = master_path .. "/config"
 local master_sysinfo_uri = master_path .. "/cluster/report_sysinfo"
