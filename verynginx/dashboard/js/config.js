@@ -92,6 +92,13 @@ config.get_config = function(){
                 'config_now':config.verynginx_config,
                 'editor':{}
             },
+            filters: {
+                remove_host: function(value) {
+                    if ( ! value.Host ) return value
+                    delete value.Host
+                    return value
+                }
+            },
             computed : {
                 all_config_json: function(){
                     return JSON.stringify( this.config_now , null, 2);

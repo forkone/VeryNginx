@@ -286,7 +286,7 @@
                                             <td>{{ matcher_name }}</td>
                                             <td><condition v-bind:matcher_conditions="{ Host : matcher_conditions.Host }" v-if="matcher_conditions.Host"></condition></td>
                                             <td >
-                                                <condition v-bind:matcher_conditions="matcher_conditions" ></condition>
+                                                <condition v-bind:matcher_conditions="matcher_conditions |remote_host" ></condition>
                                             </td>
                                             <td class="no_break">
 
