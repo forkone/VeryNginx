@@ -284,7 +284,7 @@
                                         <tr v-bind:class="[ config_now.matcher._editing == $key ? 'editing' : '']">
                                             <td>{{ $index }}</td>
                                             <td>{{ matcher_name }}</td>
-                                            <td><condition v-bind:matcher_conditions="matcher_conditions.Host" ></condition></td>
+                                            <td><condition v-bind:matcher_conditions="{ Host : matcher_conditions.Host }" v-if="matcher_conditions.Host"></condition></td>
                                             <td >
                                                 <condition v-bind:matcher_conditions="matcher_conditions" ></condition>
                                             </td>
