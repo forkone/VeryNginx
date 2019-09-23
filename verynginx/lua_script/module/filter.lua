@@ -27,7 +27,7 @@ function _M.filter()
             elseif action == 'captcha' then
                 captcha.check()
                 return
-            elseif action == 'monitor' then
+            elseif action == 'log' then
                 return
             elseif action == 'block' then
                 ngx.status = tonumber( rule['code'] )
