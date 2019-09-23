@@ -11,7 +11,7 @@ function _M.run()
         return
     end
 
-    local h = ngx.req.req_header_string()
+    local h = ngx.req.get_headers()
     for k, v in pairs(h) do
         if v == "table" then
             ngx.var.req_header_string = ngx.var.req_header_string ..k.."="
