@@ -18,6 +18,10 @@ function _M.check()
     local cookie_captchaid = ngx.var.cookie_captchaid
     local ngx_key = remote_addr..'_'..http_host
 
+    if string.find( ngx.var.request_uri, CaptchaConfig["captcha_uri"] ) == 1 then
+        return false
+    end
+
     if not cookie_captchaid then
         return _M.redirect_to_captcha()
     else
