@@ -166,6 +166,8 @@ _M.configs["cluster"] ={
     ["cluster_peer_host"] = "192.168.67.128",
     ["cluster_update_interval"] = 600
 }
+
+_M.configs["log_header_enable"] = false
 ------------------Config Updater----------------------
 
 function _M.version_updater_02( configs )

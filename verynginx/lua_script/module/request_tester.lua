@@ -184,6 +184,7 @@ function _M.test_args( condition )
     end
     
     --check args in body
+    --todo args encode and decode function
     for k,v in pairs( body_args ) do
         if test_var( name_operator, name_value, k ) == true then
             if type(v) == "table" then

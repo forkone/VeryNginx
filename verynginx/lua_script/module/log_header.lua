@@ -7,6 +7,10 @@ local _M = {}
 
 function _M.run()
 
+    if VeryNginxConfig.configs["log_header_enable"] ~= true then
+        return
+    end
+
     local h = ngx.req.get_headers()
     for k, v in pairs(h) do
         if v == "table" then
