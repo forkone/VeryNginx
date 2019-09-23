@@ -18,8 +18,8 @@ set $vn_static_root '';          #read in location @vn_static
 #access_log   logs/access_$http_host airlog04;
 #error_log    logs/error_$http_host error;
 
-set $req_header "";
-#set $req_body "";
+set $req_header_string "";
+set $req_body_string "";
 
 
 location @vn_static {

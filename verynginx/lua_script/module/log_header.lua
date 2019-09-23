@@ -11,15 +11,15 @@ function _M.run()
         return
     end
 
-    local h = ngx.req.get_headers()
+    local h = ngx.req.req_header_string()
     for k, v in pairs(h) do
         if v == "table" then
-            ngx.var.req_header = ngx.var.req_header ..k.."="
+            ngx.var.req_header_string = ngx.var.req_header_string ..k.."="
             for m,n in pairs(v) do
-                ngx.var.req_header = ngx.var.req_header .. m.."="..n.." "
+                ngx.var.req_header_string = ngx.var.req_header_string .. m.."="..n.." "
             end
         else
-            ngx.var.req_header = ngx.var.req_header .. k.."="..v.." "
+            ngx.var.req_header_string = ngx.var.req_header_string .. k.."="..v.." "
         end
     end
 
