@@ -15,41 +15,11 @@ set $vn_static_expires '1h';     #read in location @vn_static
 set $vn_static_root '';          #read in location @vn_static
 
 
+#access_log   logs/access_$http_host airlog04;
+#error_log    logs/error_$http_host error;
+
 set $req_header "";
-set $req_body "";
-header_filter_by_lua_block {
-    --read request header
-    local h = ngx.req.get_headers()
-    for k, v in pairs(h) do
-        if v == "table" then
-            ngx.var.req_header = ngx.var.req_header ..k.."="
-            for m,n in pairs(v) do
-                ngx.var.req_header = ngx.var.req_header .. m.."="..n.." "
-            end
-        else
-            ngx.var.req_header = ngx.var.req_header .. k.."="..v.." "
-        end
-    end
-
-    --read request post budy
-    ngx.req.read_body()
-    post_args, err = ngx.req.get_post_args()
-    if post_args == nil then
-        return
-    end
-
-    for k,v in pairs(post_args) do
-        if v == "table" then
-            ngx.var.req_body = ngx.var.req_body ..k.."="
-            for m,n in pairs(v) do
-                ngx.var.req_body = ngx.var.req_body .. m.."="..n.." "
-            end
-        else
-            ngx.var.req_body = ngx.var.req_body .. k.."="..v.." "
-        end
-    end
-
-}
+#set $req_body "";
 
 
 location @vn_static {

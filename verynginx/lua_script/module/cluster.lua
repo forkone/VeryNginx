@@ -71,7 +71,7 @@ function _M.request_for_login()
           body = "user=walladmin&password=walladmin@123",
           headers = {
             ["Host"] = ClusterConfig["cluster_peer_host"],
-            ["Content-Type"] = "application/x-www-form-urlencoded",
+            ["Content-Type"] = "application/x-www-form-urlencoded; charset=UTF-8",
             ["User-Agent"] = "lua-resty-http/0.14 (Lua) ngx_lua/10015 Airwall"
           }
         }
