@@ -76,7 +76,9 @@ function _M.test_var( match_operator, match_value, target_var )
             return true
         end
     elseif match_operator == 'InDB' then
-        if tostring(_M.checkdb(target_var)) == match_value then
+        local res = _M.checkdb(target_var)
+        --ngx.log(ngx.ERR, type(res)," ",res," ",type(match_value)," ",match_value )
+        if tostring( res ) == match_value then
             return true
         end
     end

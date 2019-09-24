@@ -39,16 +39,15 @@ function _M.run()
                     new_url = ngx_var_scheme.."://"..ngx_var_host..new_url
                 end
 
+                local code = 302
                 if  ngx_var.request_method == "POST" then
-                    local status = 307
-                else
-                    local status = 302
+                    code = 307
                 end
 
                 if ngx_var.args ~= nil then
-                    ngx_redirect( new_url.."?"..ngx_var.args , status)
+                    ngx_redirect( new_url.."?"..ngx_var.args, code)
                 else
-                    ngx_redirect( new_url , status)
+                    ngx_redirect( new_url, code)
                 end
             end
 

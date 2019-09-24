@@ -56,6 +56,7 @@ function _M.check_with_freq(key, time)
     local result = _M.check()
     if result == true then
         ngx.shared.frequency_limit:set( key, 1, tonumber(time) )
+        ngx.log(ngx.ERR,"freq_limit_unlock_by_captcha ")
     end
 end
 

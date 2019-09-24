@@ -32,6 +32,7 @@ function _M.verify_cookie()
     local cookie_name =  cookie_prefix .. "_sign_cookie"
     local COOKIE_VAR = "cookie_" .. cookie_name
 
+    --ngx.log(ngx.ERR,ngx.var[COOKIE_VAR]," --- ",sign)
     if ngx.var[COOKIE_VAR] and ngx.var[COOKIE_VAR] == sign then
         ngx.log(ngx.INFO,'verify_cookie_success ')
         return
@@ -40,13 +41,12 @@ function _M.verify_cookie()
     ngx.log(ngx.ERR,'verify_cookie_fail , set cookie now')
     ngx.header["Set-Cookie"] =  cookie_name .. "=" .. sign
 
+    local code = 302
     if  ngx.var.request_method == "POST" then
-        status = 307
-    else
-        status = 302
+        code = 307
     end
 
-    ngx.redirect( ngx.var.scheme.."://"..ngx.var.http_host..ngx.var.request_uri, status)
+    ngx.redirect( ngx.var.scheme.."://"..ngx.var.http_host..ngx.var.request_uri, code)
 
 end
 
@@ -55,6 +55,7 @@ function _M.verify_javascript()
     local cookie_name =  cookie_prefix .. "_sign_javascript"
     local COOKIE_VAR = "cookie_" .. cookie_name
 
+    --ngx.log(ngx.ERR,ngx.var[COOKIE_VAR]," --- ",sign)
     if ngx.var[COOKIE_VAR] and ngx.var[COOKIE_VAR] == sign then
         ngx.log(ngx.INFO,'verify_javascript_success ')
         return
@@ -77,13 +78,12 @@ function _M.verify_javascript()
     html = string.gsub( html,'INFOCOOKIE',sign )
     html = string.gsub( html,'COOKIEPREFIX',cookie_prefix )
 
+    local code = 302
     if  ngx.var.request_method == "POST" then
-        status = 307
-    else
-        status = 302
+        code = 307
     end
     
-    redirect_to =  ngx.var.scheme.."://"..ngx.var.http_host..ngx.var.request_uri, status
+    redirect_to =  ngx.var.scheme.."://"..ngx.var.http_host..ngx.var.request_uri, code
 
     html = util.string_replace( html,'INFOURI',redirect_to, 1 )
     
