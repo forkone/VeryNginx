@@ -11,6 +11,10 @@ local _M = {}
 --check cookie to tell if captchaed before. check local cache first, if not then check redis
 function _M.check()
 
+    if VeryNginxConfig.configs["captcha_enable"] ~= true then
+        return
+    end
+
     --nginx local shared dict storage in memory remote_addr-http_host:captcha_id 
     local captcha = ngx.shared.captcha
     local remote_addr = ngx.var.remote_addr
@@ -18,7 +22,8 @@ function _M.check()
     local cookie_captchaid = ngx.var.cookie_captchaid
     local ngx_key = remote_addr..'_'..http_host
 
-    if string.find( ngx.var.request_uri, CaptchaConfig["captcha_uri"] ) == 1 then
+    --fix redirect captcha url cyclely, but accept redirect url in filter module is better
+    if string.find( ngx.var.request_uri, CaptchaConfig["captcha_uri"], 1, true ) == 1 then
         return false
     end
 
@@ -27,13 +32,13 @@ function _M.check()
     else
         local ngx_captchaid = captcha:get(ngx_key)
         if ngx_captchaid and ngx_captchaid == cookie_captchaid then
-            ngx.log(ngx.ERR, "captchaid_exists_in_cache ")
+            ngx.log(ngx.ERR, "captchaid_exists_in_cache ",cookie_captchaid)
             return true
         else
             local rds_key = "airwall:kaptcha:"..cookie_captchaid
             local res = myredis.get(rds_key)
             if res and res == remote_addr then
-                ngx.log(ngx.ERR, "captchaid_exists_in_redis ")
+                ngx.log(ngx.ERR, "captchaid_exists_in_redis ",cookie_captchaid)
                 captcha:set(ngx_key, cookie_captchaid, CaptchaConfig["captcha_valid_time"])
                 return true
             else

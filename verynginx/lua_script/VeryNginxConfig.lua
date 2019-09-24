@@ -51,28 +51,22 @@ _M.configs['matcher'] = {
             ['value']="\\.(git|svn|\\.)",
         },
     },
-    ["verynginx"] = {
-        ["URI"] = {
-            ['operator'] = "≈",
-            ['value']="^/verynginx/",
-        }
+    ["captcha_entry"] = {
+        ["URI"]: {
+          ["operator"] = "≈",
+          ["value"] = "^/airwall-captcha/",
+        },
+    },
+    ["airwall_admin"] = {
+        ["Host"] = {
+          ["operator"] = "=",
+          ["value"] = "www.airwall.com",
+        },
     },
     ["localhost"] = {
         ["IP"] = {
             ["operator"] = "=",
             ["value"] = "127.0.0.1"
-        }
-    },
-    ["demo_verynginx_short_uri"] = {
-        ["URI"] = {
-            ['operator'] = "≈",
-            ['value']="^/vn",
-        }
-    },
-    ["demo_other_verynginx_uri"] = {
-        ["URI"] = {
-            ['operator'] = "=",
-            ['value']="/redirect_to_verynginx",
         }
     }
 }
@@ -89,6 +83,12 @@ _M.configs["response"] = {
 }
 
 _M.configs["backend_upstream"] = {
+    ["ups_captcha_001"] = {
+        ["node"] = {
+          ["node_captcha_001"] = { ["host"] = "192.168.67.128", ["weight"] = "10", ["scheme"] = "http", ["port"] = "8082" }
+        },
+        ["method"] = "ip_hash"
+      }
 }
 
 _M.configs["summary_collect_rule"] = {
@@ -117,15 +117,18 @@ _M.configs["browser_verify_rule"] = {
 
 _M.configs["filter_enable"] = true
 _M.configs["filter_rule"] = {
-    {["matcher"] = 'localhost', ["action"] = "accept", ["enable"] = false},
+    {["matcher"] = 'localhost', ["action"] = "accept", ["enable"] = false },
+    {["matcher"] = "airwall_admin", ["action"] = "accept", ["enable"] = true },
     {["matcher"] = 'attack_sql_0', ["action"] = "block", ["code"] = '403', ["enable"] = true },
     {["matcher"] = 'attack_backup_0', ["action"] = "block", ["code"] = '403', ["enable"] = true },
     {["matcher"] = 'attack_scan_0', ["action"] = "block", ["code"] = '403', ["enable"] = true },
     {["matcher"] = 'attack_code_0', ["action"] = "block", ["code"] = '403', ["enable"] = true },
+    {["matcher"] = "captcha_entry", ["action"] = "accept"}, ["enable"] = true },
 }
 
 _M.configs["proxy_pass_enable"] = true
 _M.configs["proxy_pass_rule"] = {
+        { ["enable"] = true, ["matcher"] = "captcha_entry", ["upstream"]: "ups_captcha_001" },
 }
 
 _M.configs["static_file_enable"] = true
@@ -136,7 +139,7 @@ _M.configs["frequency_limit_rule"] = {}
 
 _M.configs["summary_request_enable"] = true
 _M.configs["summary_with_host"] = false
-_M.configs["summary_group_persistent_enable"] = true
+_M.configs["summary_group_persistent_enable"] = false
 _M.configs["summary_group_temporary_enable"] = true
 _M.configs["summary_temporary_period"] = 60
 ----------------------Config End-------------

@@ -20,7 +20,7 @@ function _M.filter()
         local enable = rule['enable']
         local matcher = matcher_list[ rule['matcher'] ] 
         if enable == true and request_tester.test( matcher ) == true then
-            ngx.log(ngx.ERR,rule['matcher']..rule['action'],' ',rule['code'] or "captcha",' ',rule['response'] or "none")
+            --ngx.log(ngx.ERR,rule['matcher'].."_"..rule['action'],' ',rule['code'] or "captcha",' ',rule['response'] or "none")
             local action = rule['action']
             if action == 'accept' then
                 return
@@ -30,6 +30,7 @@ function _M.filter()
             elseif action == 'log' then
                 return
             elseif action == 'block' then
+                ngx.log(ngx.ERR,rule['matcher'].."_"..rule['action'],' ',rule['code'],' ',rule['response'] or "none")
                 ngx.status = tonumber( rule['code'] )
                 if rule['response'] ~= nil then
                     response = response_list[rule['response']]
