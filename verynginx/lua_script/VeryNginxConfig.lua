@@ -52,7 +52,7 @@ _M.configs['matcher'] = {
         },
     },
     ["captcha_entry"] = {
-        ["URI"]: {
+        ["URI"] = {
           ["operator"] = "≈",
           ["value"] = "^/airwall-captcha/",
         },
@@ -128,7 +128,7 @@ _M.configs["filter_rule"] = {
 
 _M.configs["proxy_pass_enable"] = true
 _M.configs["proxy_pass_rule"] = {
-        { ["enable"] = true, ["matcher"] = "captcha_entry", ["upstream"]: "ups_captcha_001" },
+        { ["enable"] = true, ["matcher"] = "captcha_entry", ["upstream"] = "ups_captcha_001" },
 }
 
 _M.configs["static_file_enable"] = true
