@@ -123,7 +123,7 @@ _M.configs["filter_rule"] = {
     {["matcher"] = 'attack_backup_0', ["action"] = "block", ["code"] = '403', ["enable"] = true },
     {["matcher"] = 'attack_scan_0', ["action"] = "block", ["code"] = '403', ["enable"] = true },
     {["matcher"] = 'attack_code_0', ["action"] = "block", ["code"] = '403', ["enable"] = true },
-    {["matcher"] = "captcha_entry", ["action"] = "accept", ["enable"] = true },
+    {["matcher"] = "captcha_entry", ["action"] = "accept", ["enable"] = true }
 }
 
 _M.configs["proxy_pass_enable"] = true
