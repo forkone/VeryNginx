@@ -17,7 +17,7 @@ _M["configs"] = {}
 _M.configs["config_version"] = "0.36"
 _M.configs["readonly"] = false
 _M.configs["base_uri"] = "/airwall"
-_M.configs['dashboard_host'] = "www.airwall.com"
+_M.configs['dashboard_host'] = ""
 _M.configs['cookie_prefix'] = "airwall"
 _M.configs["admin"] = {
     { ["user"] = "verynginx", ["password"] = "verynginx", ["enable"] = false},
@@ -51,16 +51,26 @@ _M.configs['matcher'] = {
             ['value']="\\.(git|svn|\\.)",
         },
     },
-    ["captcha_entry"] = {
+    ["entry_for_airwall"] = {
+        ["URI"] = {
+          ["operator"] = "≈",
+          ["value"] = "^/airwall/",
+        },
+    },
+    ["entry_for_airwall_ipwhitelist"] = {
+        ["URI"] = {
+          ["operator"] = "≈",
+          ["value"] = "^/airwall/",
+        },
+        ["IP"] = {
+            ["operator"] = "≈",
+            ["value"] = "^10.142"
+          },
+    },
+    ["entry_for_captcha"] = {
         ["URI"] = {
           ["operator"] = "≈",
           ["value"] = "^/airwall-captcha/",
-        },
-    },
-    ["airwall_admin"] = {
-        ["Host"] = {
-          ["operator"] = "=",
-          ["value"] = "www.airwall.com",
         },
     },
     ["localhost"] = {
@@ -85,7 +95,7 @@ _M.configs["response"] = {
 _M.configs["backend_upstream"] = {
     ["ups_captcha_001"] = {
         ["node"] = {
-          ["node_captcha_001"] = { ["host"] = "192.168.67.128", ["weight"] = "10", ["scheme"] = "http", ["port"] = "8082" }
+          ["node_captcha_001"] = { ["scheme"] = "http", ["host"] = "127.0.0.1", ["port"] = "8082", ["weight"] = "10" }
         },
         ["method"] = "ip_hash"
       }
@@ -118,17 +128,18 @@ _M.configs["browser_verify_rule"] = {
 _M.configs["filter_enable"] = true
 _M.configs["filter_rule"] = {
     {["matcher"] = 'localhost', ["action"] = "accept", ["enable"] = false },
-    {["matcher"] = "airwall_admin", ["action"] = "accept", ["enable"] = true },
+    {["matcher"] = "entry_for_airwall_ipwhitelist", ["action"] = "accept", ["enable"] = true },
+    {["matcher"] = 'entry_for_airwall', ["action"] = "block", ["code"] = '404', ["enable"] = true },
     {["matcher"] = 'attack_sql_0', ["action"] = "block", ["code"] = '403', ["enable"] = true },
     {["matcher"] = 'attack_backup_0', ["action"] = "block", ["code"] = '403', ["enable"] = true },
     {["matcher"] = 'attack_scan_0', ["action"] = "block", ["code"] = '403', ["enable"] = true },
     {["matcher"] = 'attack_code_0', ["action"] = "block", ["code"] = '403', ["enable"] = true },
-    {["matcher"] = "captcha_entry", ["action"] = "accept", ["enable"] = true }
+    {["matcher"] = "entry_for_captcha", ["action"] = "accept", ["enable"] = true }
 }
 
 _M.configs["proxy_pass_enable"] = true
 _M.configs["proxy_pass_rule"] = {
-        { ["enable"] = true, ["matcher"] = "captcha_entry", ["upstream"] = "ups_captcha_001" },
+        { ["enable"] = true, ["matcher"] = "entry_for_captcha", ["upstream"] = "ups_captcha_001" },
 }
 
 _M.configs["static_file_enable"] = true
