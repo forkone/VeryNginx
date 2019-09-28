@@ -28,6 +28,7 @@ function _M.filter()
                 captcha.check()
                 return
             elseif action == 'log' then
+                ngx.log(ngx.ERR,rule['matcher'].."_"..rule['action'],' ',"nothing but log")
                 return
             elseif action == 'block' then
                 ngx.log(ngx.ERR,rule['matcher'].."_"..rule['action'],' ',rule['code'],' ',rule['response'] or "none")

@@ -208,7 +208,7 @@ end
 
 function _M.test_host( condition )
     local hostname = ngx.var.http_host
---    ngx.var.host = server_name, 对于非80/443端口号的server没有端口号
+    --ngx.var.host = server_name, 对于非80/443端口号的server没有端口号
     return _M.test_var( condition['operator'], condition['value'], hostname )
 end
 

@@ -64,7 +64,7 @@ _M.configs['matcher'] = {
         },
         ["IP"] = {
             ["operator"] = "≈",
-            ["value"] = "(^10.142|^192.168)"
+            ["value"] = "(^10.142|^192.168)",
           },
     },
     ["entry_for_captcha"] = {
